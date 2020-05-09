@@ -117,6 +117,10 @@ div.fraction {
   width: 100%;
 }
 
+div.history div.fraction{
+  border-bottom: 0.3vmin solid rgb(128, 128, 128);
+}
+
 div.highlight {
   border: 0.5vmin solid gray;
   border-radius: 2.5vmin;
