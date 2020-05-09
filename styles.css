@@ -51,7 +51,6 @@ button.display {
   line-height: 0.9vmin;
 }
 
-
 .error {
   color: rgb(214, 80, 27);
 }
@@ -93,6 +92,10 @@ div.history > div.math {
   padding-top: 1vmin;
 }
 
+div.historyPre {
+  overflow-y: scroll;
+}
+
 div.flex {
   display: flex;
   align-items: center;
@@ -116,7 +119,7 @@ div.fraction {
   width: 100%;
 }
 
-div.history div.fraction{
+div.history div.fraction {
   border-bottom: 0.3vmin solid rgb(128, 128, 128);
 }
 
