@@ -1,5 +1,6 @@
 * {
   font-family: 'Roboto', sans-serif;
+  background-color: rgb(30, 30, 30);
 }
 
 html,
@@ -38,6 +39,11 @@ button {
   text-align: center;
   background-color: rgb(60, 60, 60);
   color: rgb(206, 145, 120);
+}
+
+svg.svgIcon{
+  height: 4vmin;  
+  fill: rgb(206, 145, 120);
 }
 
 button.ongoing {
@@ -184,3 +190,4 @@ input {
   height: 3vmin;
   width: 30vmin;
 }
+
