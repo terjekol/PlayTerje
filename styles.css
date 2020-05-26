@@ -41,7 +41,7 @@ button {
 }
 
 svg.svgIcon{
-  height: 4vmin;  
+  width: 4vmin;  
   fill: rgb(206, 145, 120);
 }
 
