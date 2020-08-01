@@ -1,5 +1,3 @@
-# PlayTerje.com
-
 Velkommen til mitt lille nettsted som for det meste handler om matematikk og programmering. Jeg heter Terje Kolderup og er til daglig lærer i programmering ved [GET Academy](https://getacademy.no/), som er en nettskole og fysisk skole i Larvik, hvor du kan bli programmerer på 1,5 år - uten formelle krav, dvs. du må ikke ha fullført videregående skole.
 
 Denne siden er her først og fremst som en liten "innholdsfortegnelse" for diverse ting jeg har laget:
