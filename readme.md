@@ -7,3 +7,9 @@ Denne siden er her først og fremst som en liten "innholdsfortegnelse" for diver
  - [Boken min "Koding for alle i JavaScript"](https://www.cappelendamm.no/_koding-for-alle-i-javascript-terje-kolderup-9788202661243)
  - Øvelser i gangetabellen med leaderboards for tid og sted [mattea.app](https://mattea.app/) (Skal flyttes til playterje.com)
  - [Mathemateria-appen til Android](https://play.google.com/store/apps/details?id=com.capellait.mathemateria&hl=no)
+
+ - Meg på sosiale medier:
+   - [facebook.com/playterje](https://www.facebook.com/playterje)
+   - [facebook.com/terjekolderup](https://www.facebook.com/terjekolderup)
+   - [twitter.com/terjekol](https://twitter.com/terjekol)
+   - [www.linkedin.com/in/kolderup](https://www.linkedin.com/in/kolderup)
