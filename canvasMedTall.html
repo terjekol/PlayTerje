@@ -89,7 +89,7 @@
             ctx.putImageData(imageData, 0, 0);
         }
 
-        function setPixel(x, y, r, g, b, a) {
+        function drawPixel(x, y, r, g, b, a) {
             const index = y * canvasSize + x;
             imageData.data[index] = r || 0;
             imageData.data[index+1] = g || 0;
