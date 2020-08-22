@@ -91,10 +91,10 @@
 
         function drawPixel(x, y, r, g, b, a) {
             const index = y * canvasSize + x;
-            imageData.data[index] = r || 0;
-            imageData.data[index+1] = g || 0;
-            imageData.data[index+2] = b || 0;
-            imageData.data[index+3] = a || 255;
+            imageData.data[index] = r === undefined ? 0 : r;
+            imageData.data[index + 1] = g === undefined ? 0 : g;
+            imageData.data[index + 2] = b === undefined ? 0 : b;
+            imageData.data[index + 3] = a === undefined ? 255 : a;
             ctx.putImageData(imageData, 0, 0);
             showNumbers();
         }
@@ -106,7 +106,7 @@
         }
 
         function clearCanvas() {
-            ctx.clearRect(0,0,canvasSize,canvasSize);
+            ctx.clearRect(0, 0, canvasSize, canvasSize);
             imageData = ctx.getImageData(0, 0, canvasSize, canvasSize);
         }
 
