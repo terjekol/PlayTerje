@@ -26,6 +26,10 @@
             display: flex;
             flex-direction: row;
         }
+
+        #numbersDiv {
+            display: grid;
+        }
     </style>
 </head>
 
@@ -45,20 +49,39 @@
         ctx.fillStyle = 'blue';
         ctx.fillRect(1, 1, 3, 3);
         let imageData = ctx.getImageData(0, 0, canvasSize, canvasSize);
+        document.getElementById('numbersDiv').style.gridTemplateColumns = `repeat(${canvasSize}, 1fr)`;
 
         showNumbers();
         function showNumbers() {
-            document.getElementById('numbersDiv').innerHTML = `
-                        
-            ${Array.from(imageData.data).map((n, i) => `
-                ${getPixelNo(i)}
-                ${getLetter(i)}
-                <input type="range" min="0" max="255" step="1" value="${n}" />
-            `).join('')}
-            
-                </table>
-            
+            document.getElementById('numbersDiv').innerHTML =
+                range(0, canvasSize * canvasSize).map(createHtmlForNumber).join('');
+        }
+
+        function createHtmlForNumber(pixelIndex) {
+            const baseIndex = pixelIndex * 4;
+            const x = pixelIndex % canvasSize;
+            const y = Math.floor(pixelIndex / canvasSize);
+
+            //imageData.data
+            return `
+                <div class="pixel">
+                    <b>(${x},${y}):</b><br/>
+                    ${range(0, 4).map(i => `
+                        ${'RGBA'[i]}: 
+                        <input type="range" min="0" max="255" step="1" 
+                               value="${imageData.data[baseIndex + i]}" 
+                               oninput="updateImage(${baseIndex + i},this.value)"
+                        /><br/>
+                    
+                    `).join('')}
+                    &nbsp;
+                </div>
             `;
+        }
+
+        function updateImage(index, newValue) {
+            imageData.data[index] = newValue;
+            ctx.putImageData(imageData, 0, 0);
         }
 
         function range(fromInclusive, toExclusive) {
@@ -67,17 +90,7 @@
                 .map(n => n + fromInclusive);
         }
 
-        function getLetter(index) {
-            return 'RGBA'[index % 4];
-        }
 
-        function getPixelNo(index) {
-            const rem = index % 4;
-            if (rem !== 0) return '';
-            const x = index % canvasSize;
-            const y = Math.floor(index / canvasSize);
-            return `<br/><b>${x},${y}:</b>`;
-        }
     </script>
 </body>
 
