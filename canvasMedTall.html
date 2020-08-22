@@ -90,7 +90,8 @@
         }
 
         function drawPixel(x, y, r, g, b, a) {
-            const index = y * canvasSize + x;
+            const pixelIndex = y * canvasSize + x;
+            const index = pixelIndex * 4;
             imageData.data[index] = r === undefined ? 0 : r;
             imageData.data[index + 1] = g === undefined ? 0 : g;
             imageData.data[index + 2] = b === undefined ? 0 : b;
