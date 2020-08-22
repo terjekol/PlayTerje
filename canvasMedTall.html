@@ -105,6 +105,11 @@
                 .map(n => n + fromInclusive);
         }
 
+        function clearCanvas() {
+            ctx.clearRect(0,0,canvasSize,canvasSize);
+            imageData = ctx.getImageData(0, 0, canvasSize, canvasSize);
+        }
+
 
     </script>
 </body>
