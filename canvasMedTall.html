@@ -30,6 +30,10 @@
         #numbersDiv {
             display: grid;
         }
+
+        input {
+            width: 30%;
+        }
     </style>
 </head>
 
@@ -71,7 +75,8 @@
                         <input type="range" min="0" max="255" step="1" 
                                value="${imageData.data[baseIndex + i]}" 
                                oninput="updateImage(${baseIndex + i},this.value)"
-                        /><br/>
+                               onchange="showNumbers()"
+                        /> ${imageData.data[baseIndex + i]}<br/>
                     
                     `).join('')}
                     &nbsp;
@@ -82,6 +87,16 @@
         function updateImage(index, newValue) {
             imageData.data[index] = newValue;
             ctx.putImageData(imageData, 0, 0);
+        }
+
+        function setPixel(x, y, r, g, b, a) {
+            const index = y * canvasSize + x;
+            imageData.data[index] = r || 0;
+            imageData.data[index+1] = g || 0;
+            imageData.data[index+2] = b || 0;
+            imageData.data[index+3] = a || 255;
+            ctx.putImageData(imageData, 0, 0);
+            showNumbers();
         }
 
         function range(fromInclusive, toExclusive) {
