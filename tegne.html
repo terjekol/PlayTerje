@@ -35,14 +35,12 @@
         const ctx = canvas.getContext("2d");
         let imageData = ctx.getImageData(0, 0, canvasSize, canvasSize);
 
-
-
         function updateImage(index, newValue) {
             imageData.data[index] = newValue;
             ctx.putImageData(imageData, 0, 0);
         }
 
-        function drawPixel(x, y, r, g, b, a) {
+        function tegnPiksel(x, y, r, g, b, a) {
             const pixelIndex = y * canvasSize + x;
             const index = pixelIndex * 4;
             imageData.data[index] = r === undefined ? 0 : r;
@@ -58,23 +56,10 @@
                 .map(n => n + fromInclusive);
         }
 
-        function clearCanvas() {
+        function fjernAlt() {
             ctx.clearRect(0, 0, canvasSize, canvasSize);
             imageData = ctx.getImageData(0, 0, canvasSize, canvasSize);
         }
-
-
-        function drawLine(x1, y1, x2, y2) {
-            const deltaY = (y2 - y1) / (x2 - x1);
-            let yFloat = y1;
-            for (x of range(x1, x2 + 1)) {
-                const y = Math.floor(yFloat);
-                drawPixel(x, y, 0, 200, 200);
-                yFloat += deltaY;
-            }
-        }
-
-// http://members.chello.at/easyfilter/canvas.html
     </script>
 </body>
 
