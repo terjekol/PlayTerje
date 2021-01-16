@@ -25,7 +25,7 @@
         const wallToCornerRatio = 4;
         const wallSize = cornerSize * wallToCornerRatio;
         const roomCount = labyrinthSize * labyrinthSize;
-        const pixels = labyrinthSize * wallSize + (labyrinthSize + 1) * cornerSize;
+        const pixels = calcWallSize(labyrinthSize);
         canvas.setAttribute('width', pixels);
         canvas.setAttribute('height', pixels);
 
@@ -37,11 +37,26 @@
                 const colIndex = roomIndex % labyrinthSize;
                 const isFirstCol = colIndex == 0;
                 const isFirstRow = rowIndex == 0;
-                if (isFirstRow) drawWall(roomIndex, 'north');
-                if (isFirstCol) drawWall(roomIndex, 'west');
-                drawWall(roomIndex, 'east');
-                drawWall(roomIndex, 'south');
+                if (isFirstRow) drawWall(rowIndex, colIndex, roomIndex, 'north');
+                if (isFirstCol) drawWall(rowIndex, colIndex, roomIndex, 'west');
+                drawWall(rowIndex, colIndex, roomIndex, 'east');
+                drawWall(rowIndex, colIndex, roomIndex, 'south');
             }
+        }
+
+        function drawWall(rowIndex, colIndex, roomIndex, direction) {
+            const doorKey = direction + roomIndex;
+            if (openDoors[doorKey]) return;
+            const x = calcWallSize(colIndex) + (direction == 'east' ? wallSize : 0);
+            const y = calcWallSize(rowIndex) + (direction == 'south' ? wallSize : 0);
+            const isDoorHorizontal = direction == 'north' || direction == 'south';
+            const width = isDoorHorizontal ? wallSize : cornerSize;
+            const height = isDoorHorizontal ? cornerSize : wallSize;
+            ctx.fillRect(x, y, width, height);
+        }
+
+        function calcWallSize(index) {
+            return index * wallSize + (index + 1) * cornerSize;
         }
     </script>
 </body>
