@@ -1,18 +1,13 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-const openDoors = {
-    north0: true,
-    east0: true,
-    west1: true,
-    east1: true,
-    west2: true,
-    south2: true,
-};
 const labyrinthSize = 5;
 const cornerSize = 10;
 const wallToCornerRatio = 4;
-const wallSize = cornerSize * wallToCornerRatio;
 const roomCount = labyrinthSize * labyrinthSize;
+const openDoors = {};
+openDoors['north0'] = true;
+openDoors['south' + (roomCount - 1)] = true;
+const wallSize = cornerSize * wallToCornerRatio;
 const pixels = calcWallSize(labyrinthSize + 1);
 canvas.setAttribute('width', pixels);
 canvas.setAttribute('height', pixels);
@@ -55,9 +50,9 @@ function drawWall(rowIndex, colIndex, roomIndex, direction) {
     ctx.fillRect(x, y, width, height);
 }
 
-function drawCorner(rowIndex, colIndex, addX, addY){
-    let x = calcWallSize(colIndex) + addX * (cornerSize+wallSize);
-    let y = calcWallSize(rowIndex) + addY * (cornerSize+wallSize);
+function drawCorner(rowIndex, colIndex, addX, addY) {
+    let x = calcWallSize(colIndex) + addX * (cornerSize + wallSize);
+    let y = calcWallSize(rowIndex) + addY * (cornerSize + wallSize);
     ctx.fillRect(x, y, cornerSize, cornerSize);
 }
 
