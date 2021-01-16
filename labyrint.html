@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labyrint</title>
+</head>
+
+<body>
+    <canvas id="myCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+        const openDoors = {
+            north0: true,
+            east0: true,
+            west1: true,
+            east1: true,
+            west2: true,
+            south2: true,
+        };
+        const labyrinthSize = 3;
+        const cornerSize = 10;
+        const wallToCornerRatio = 4;
+        const wallSize = cornerSize * wallToCornerRatio;
+        const roomCount = labyrinthSize * labyrinthSize;
+        const pixels = labyrinthSize * wallSize + (labyrinthSize + 1) * cornerSize;
+        canvas.setAttribute('width', pixels);
+        canvas.setAttribute('height', pixels);
+
+        drawLabyrinth();
+        function drawLabyrinth() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let roomIndex = 0; roomIndex < roomCount; roomIndex++) {
+                const rowIndex = Math.floor(roomIndex / labyrinthSize);
+                const colIndex = roomIndex % labyrinthSize;
+                const isFirstCol = colIndex == 0;
+                const isFirstRow = rowIndex == 0;
+                if (isFirstRow) drawWall(roomIndex, 'north');
+                if (isFirstCol) drawWall(roomIndex, 'west');
+                drawWall(roomIndex, 'east');
+                drawWall(roomIndex, 'south');
+            }
+        }
+    </script>
+</body>
+
+</html>
