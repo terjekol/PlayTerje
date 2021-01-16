@@ -9,56 +9,7 @@
 
 <body>
     <canvas id="myCanvas"></canvas>
-    <script>
-        const canvas = document.getElementById("myCanvas");
-        const ctx = canvas.getContext("2d");
-        const openDoors = {
-            north0: true,
-            east0: true,
-            west1: true,
-            east1: true,
-            west2: true,
-            south2: true,
-        };
-        const labyrinthSize = 3;
-        const cornerSize = 10;
-        const wallToCornerRatio = 4;
-        const wallSize = cornerSize * wallToCornerRatio;
-        const roomCount = labyrinthSize * labyrinthSize;
-        const pixels = calcWallSize(labyrinthSize);
-        canvas.setAttribute('width', pixels);
-        canvas.setAttribute('height', pixels);
-
-        drawLabyrinth();
-        function drawLabyrinth() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let roomIndex = 0; roomIndex < roomCount; roomIndex++) {
-                const rowIndex = Math.floor(roomIndex / labyrinthSize);
-                const colIndex = roomIndex % labyrinthSize;
-                const isFirstCol = colIndex == 0;
-                const isFirstRow = rowIndex == 0;
-                if (isFirstRow) drawWall(rowIndex, colIndex, roomIndex, 'north');
-                if (isFirstCol) drawWall(rowIndex, colIndex, roomIndex, 'west');
-                drawWall(rowIndex, colIndex, roomIndex, 'east');
-                drawWall(rowIndex, colIndex, roomIndex, 'south');
-            }
-        }
-
-        function drawWall(rowIndex, colIndex, roomIndex, direction) {
-            const doorKey = direction + roomIndex;
-            if (openDoors[doorKey]) return;
-            const x = calcWallSize(colIndex) + (direction == 'east' ? wallSize : 0);
-            const y = calcWallSize(rowIndex) + (direction == 'south' ? wallSize : 0);
-            const isDoorHorizontal = direction == 'north' || direction == 'south';
-            const width = isDoorHorizontal ? wallSize : cornerSize;
-            const height = isDoorHorizontal ? cornerSize : wallSize;
-            ctx.fillRect(x, y, width, height);
-        }
-
-        function calcWallSize(index) {
-            return index * wallSize + (index + 1) * cornerSize;
-        }
-    </script>
+    <script src="labyrinth.js">    </script>
 </body>
 
 </html>
