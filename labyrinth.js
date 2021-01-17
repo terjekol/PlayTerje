@@ -22,6 +22,8 @@ let character = {
     roomIndex: 0,
     direction: 'west',
 };
+const commandQueue = [];
+const timer = null;
 
 generateLabyrinth();
 drawLabyrinth();
@@ -158,6 +160,7 @@ function shuffle(array) {
 }
 
 function snuVenstre() {
+    //pause(400);
     character.direction = {
         'north': 'west',
         'east': 'north',
@@ -169,6 +172,7 @@ function snuVenstre() {
 }
 
 function snuHøyre() {
+    //pause(400);
     character.direction = {
         'north': 'east',
         'east': 'south',
@@ -180,6 +184,7 @@ function snuHøyre() {
 }
 
 function gå() {
+    //pause(400);
     if (!openWalls[character.direction + character.roomIndex]) return false;
     const position = getRowAndCol(character.roomIndex);
 
@@ -195,4 +200,13 @@ function getRowAndCol(roomIndex) {
     const rowIndex = Math.floor(roomIndex / labyrinthSize);
     const colIndex = roomIndex % labyrinthSize;
     return { rowIndex, colIndex };
+}
+
+
+function pause(millis)
+{
+    var date = new Date();
+    var curDate = null;
+    do { curDate = new Date(); }
+    while(curDate-date < millis);
 }
