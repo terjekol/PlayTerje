@@ -1,6 +1,6 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-const labyrinthSize = 15;
+const labyrinthSize = 6;
 const cornerSize = 10;
 const wallToCornerRatio = 4;
 const directions = ['north', 'south', 'east', 'west'];
@@ -18,6 +18,10 @@ const wallSize = cornerSize * wallToCornerRatio;
 const pixels = calcWallSize(labyrinthSize + 1);
 canvas.setAttribute('width', pixels);
 canvas.setAttribute('height', pixels);
+let character = {
+    roomIndex: 0,
+    direction: 'east',
+};
 
 generateLabyrinth();
 drawLabyrinth();
@@ -63,6 +67,35 @@ function drawLabyrinth() {
     for (let roomIndex = 0; roomIndex < roomCount; roomIndex++) {
         drawRoom(roomIndex);
     }
+    drawCharacter();
+}
+
+function drawCharacter() {
+    const rowIndex = Math.floor(character.roomIndex / labyrinthSize);
+    const colIndex = character.roomIndex % labyrinthSize;
+    let x = calcWallSize(colIndex) + 1.5 * cornerSize;
+    let y = calcWallSize(rowIndex) + 1.5 * cornerSize;
+    const size = wallSize - cornerSize;
+    ctx.beginPath();
+    if (character.direction == 'east') {
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + size, y + size / 2);
+        ctx.lineTo(x, y + size);
+    } else if (character.direction == 'west') {
+        ctx.moveTo(x, y + size/2);
+        ctx.lineTo(x + size, y );
+        ctx.lineTo(x, y + size);
+    } else if (character.direction == 'north') {
+        ctx.moveTo(x + size / 2, y);
+        ctx.lineTo(x, y + size);
+        ctx.lineTo(x + size , y + size);
+    } else if (character.direction == 'south') {
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + size, y);
+        ctx.lineTo(x + size / 2, y + size);
+    }
+    ctx.fill();
+
 }
 
 function drawRoom(roomIndex) {
