@@ -1,6 +1,6 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-const labyrinthSize = 5;
+const labyrinthSize = 15;
 const cornerSize = 10;
 const wallToCornerRatio = 4;
 const directions = ['north', 'south', 'east', 'west'];
