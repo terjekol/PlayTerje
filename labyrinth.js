@@ -20,7 +20,7 @@ canvas.setAttribute('width', pixels);
 canvas.setAttribute('height', pixels);
 let character = {
     roomIndex: 0,
-    direction: 'east',
+    direction: 'west',
 };
 
 generateLabyrinth();
@@ -82,13 +82,13 @@ function drawCharacter() {
         ctx.lineTo(x + size, y + size / 2);
         ctx.lineTo(x, y + size);
     } else if (character.direction == 'west') {
-        ctx.moveTo(x, y + size/2);
-        ctx.lineTo(x + size, y );
-        ctx.lineTo(x, y + size);
+        ctx.moveTo(x, y + size / 2);
+        ctx.lineTo(x + size, y);
+        ctx.lineTo(x + size, y + size);
     } else if (character.direction == 'north') {
         ctx.moveTo(x + size / 2, y);
         ctx.lineTo(x, y + size);
-        ctx.lineTo(x + size , y + size);
+        ctx.lineTo(x + size, y + size);
     } else if (character.direction == 'south') {
         ctx.moveTo(x, y);
         ctx.lineTo(x + size, y);
@@ -155,4 +155,44 @@ function shuffle(array) {
     }
 
     return array;
+}
+
+function snuVenstre() {
+    character.direction = {
+        'north': 'west',
+        'east': 'north',
+        'south': 'east',
+        'west': 'south',
+    }[character.direction];
+    drawLabyrinth();
+    return character.direction;
+}
+
+function snuHøyre() {
+    character.direction = {
+        'north': 'east',
+        'east': 'south',
+        'south': 'west',
+        'west': 'north',
+    }[character.direction];
+    drawLabyrinth();
+    return character.direction;
+}
+
+function gå() {
+    if (!openWalls[character.direction + character.roomIndex]) return false;
+    const position = getRowAndCol(character.roomIndex);
+
+    if (character.direction == 'north' && position.rowIndex > 0) character.roomIndex -= labyrinthSize;
+    else if (character.direction == 'west' && position.colIndex > 0) character.roomIndex -= 1;
+    else if (character.direction == 'east' && position.colIndex < labyrinthSize - 1) character.roomIndex += 1;
+    else if (character.direction == 'south' && position.rowIndex < labyrinthSize - 1) character.roomIndex += labyrinthSize;
+    drawLabyrinth();
+    return true;
+}
+
+function getRowAndCol(roomIndex) {
+    const rowIndex = Math.floor(roomIndex / labyrinthSize);
+    const colIndex = roomIndex % labyrinthSize;
+    return { rowIndex, colIndex };
 }
