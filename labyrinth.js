@@ -4,10 +4,16 @@ const labyrinthSize = 5;
 const cornerSize = 10;
 const wallToCornerRatio = 4;
 const directions = ['north', 'south', 'east', 'west'];
+const oppositeDirection = {
+    'north': 'south',
+    'south': 'north',
+    'west': 'east',
+    'east': 'west',
+};
 const roomCount = labyrinthSize * labyrinthSize;
-const openDoors = {};
-openDoors['north0'] = true;
-openDoors['south' + (roomCount - 1)] = true;
+const openWalls = {};
+openWalls['north0'] = true;
+openWalls['south' + (roomCount - 1)] = true;
 const wallSize = cornerSize * wallToCornerRatio;
 const pixels = calcWallSize(labyrinthSize + 1);
 canvas.setAttribute('width', pixels);
@@ -24,23 +30,33 @@ function generateLabyrinth() {
 
     while (stack.length > 0) {
         let currentRoom = stack.pop();
-        let neighbourNotVisited = getNeighbourNotVisited(currentRoom);
+        let neighbourNotVisited = getNeighbourNotVisited(currentRoom, rooms);
+        if (neighbourNotVisited === null) continue;
+        stack.push(currentRoom);
+        openWalls[neighbourNotVisited.direction + currentRoom] = true;
+        const directionFromNeighbour = oppositeDirection[neighbourNotVisited.direction];
+        openWalls[directionFromNeighbour + neighbourNotVisited.roomIndex] = true;
+        rooms[neighbourNotVisited.roomIndex] = true;
+        stack.push(neighbourNotVisited.roomIndex);
     }
 }
 
-function getNeighbourNotVisited(roomIndex) {
+function getNeighbourNotVisited(roomIndex, rooms) {
     shuffle(directions);
     const rowIndex = Math.floor(roomIndex / labyrinthSize);
     const colIndex = roomIndex % labyrinthSize;
     for (let direction of directions) {
-        if (direction == 'north' && rowIndex > 0 && !rooms[roomIndex - labyrinthSize]) return roomIndex - labyrinthSize
-        if (direction == 'west' && rowIndex > 0 && !rooms[roomIndex - labyrinthSize]) return roomIndex - labyrinthSize
-        if (direction == 'east' && rowIndex > 0 && !rooms[roomIndex - labyrinthSize]) return roomIndex - labyrinthSize
-        if (direction == 'south' && rowIndex > 0 && !rooms[roomIndex - labyrinthSize]) return roomIndex - labyrinthSize
+        if (direction == 'north' && rowIndex > 0 && !rooms[roomIndex - labyrinthSize])
+            return { roomIndex: roomIndex - labyrinthSize, direction };
+        if (direction == 'west' && colIndex > 0 && !rooms[roomIndex - 1])
+            return { roomIndex: roomIndex - 1, direction };
+        if (direction == 'east' && colIndex < labyrinthSize - 1 && !rooms[roomIndex + 1])
+            return { roomIndex: roomIndex + 1, direction };
+        if (direction == 'south' && rowIndex < labyrinthSize - 1 && !rooms[roomIndex + labyrinthSize])
+            return { roomIndex: roomIndex + labyrinthSize, direction };
     }
+    return null;
 }
-
-function 
 
 function drawLabyrinth() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -66,7 +82,7 @@ function drawRoom(roomIndex) {
 
 function drawWall(rowIndex, colIndex, roomIndex, direction) {
     const doorKey = direction + roomIndex;
-    if (openDoors[doorKey]) return;
+    if (openWalls[doorKey]) return;
     const isDoorHorizontal = direction == 'north' || direction == 'south';
     let x = calcWallSize(colIndex);
     let y = calcWallSize(rowIndex);
