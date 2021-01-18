@@ -12,7 +12,7 @@ const oppositeDirection = {
 };
 const roomCount = labyrinthSize * labyrinthSize;
 const openWalls = {};
-openWalls['north0'] = true;
+openWalls['opp0'] = true;
 openWalls['ned' + (roomCount - 1)] = true;
 const wallSize = cornerSize * wallToCornerRatio;
 const pixels = calcWallSize(labyrinthSize + 1);
