@@ -1,26 +1,26 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 const labyrinthSize = 6;
-const cornerSize = 10;
+const cornerSize = 20;
 const wallToCornerRatio = 4;
-const directions = ['north', 'south', 'east', 'west'];
+const directions = ['opp', 'ned', 'høyre', 'venstre'];
 const oppositeDirection = {
-    'north': 'south',
-    'south': 'north',
-    'west': 'east',
-    'east': 'west',
+    'opp': 'ned',
+    'ned': 'opp',
+    'venstre': 'høyre',
+    'høyre': 'venstre',
 };
 const roomCount = labyrinthSize * labyrinthSize;
 const openWalls = {};
 openWalls['north0'] = true;
-openWalls['south' + (roomCount - 1)] = true;
+openWalls['ned' + (roomCount - 1)] = true;
 const wallSize = cornerSize * wallToCornerRatio;
 const pixels = calcWallSize(labyrinthSize + 1);
 canvas.setAttribute('width', pixels);
 canvas.setAttribute('height', pixels);
 let character = {
     roomIndex: 0,
-    direction: 'west',
+    direction: 'ned',
 };
 const commandQueue = [];
 const timer = null;
@@ -52,13 +52,13 @@ function getNeighbourNotVisited(roomIndex, rooms) {
     const rowIndex = Math.floor(roomIndex / labyrinthSize);
     const colIndex = roomIndex % labyrinthSize;
     for (let direction of directions) {
-        if (direction == 'north' && rowIndex > 0 && !rooms[roomIndex - labyrinthSize])
+        if (direction == 'opp' && rowIndex > 0 && !rooms[roomIndex - labyrinthSize])
             return { roomIndex: roomIndex - labyrinthSize, direction };
-        if (direction == 'west' && colIndex > 0 && !rooms[roomIndex - 1])
+        if (direction == 'venstre' && colIndex > 0 && !rooms[roomIndex - 1])
             return { roomIndex: roomIndex - 1, direction };
-        if (direction == 'east' && colIndex < labyrinthSize - 1 && !rooms[roomIndex + 1])
+        if (direction == 'høyre' && colIndex < labyrinthSize - 1 && !rooms[roomIndex + 1])
             return { roomIndex: roomIndex + 1, direction };
-        if (direction == 'south' && rowIndex < labyrinthSize - 1 && !rooms[roomIndex + labyrinthSize])
+        if (direction == 'ned' && rowIndex < labyrinthSize - 1 && !rooms[roomIndex + labyrinthSize])
             return { roomIndex: roomIndex + labyrinthSize, direction };
     }
     return null;
@@ -79,19 +79,19 @@ function drawCharacter() {
     let y = calcWallSize(rowIndex) + 1.5 * cornerSize;
     const size = wallSize - cornerSize;
     ctx.beginPath();
-    if (character.direction == 'east') {
+    if (character.direction == 'høyre') {
         ctx.moveTo(x, y);
         ctx.lineTo(x + size, y + size / 2);
         ctx.lineTo(x, y + size);
-    } else if (character.direction == 'west') {
+    } else if (character.direction == 'venstre') {
         ctx.moveTo(x, y + size / 2);
         ctx.lineTo(x + size, y);
         ctx.lineTo(x + size, y + size);
-    } else if (character.direction == 'north') {
+    } else if (character.direction == 'opp') {
         ctx.moveTo(x + size / 2, y);
         ctx.lineTo(x, y + size);
         ctx.lineTo(x + size, y + size);
-    } else if (character.direction == 'south') {
+    } else if (character.direction == 'ned') {
         ctx.moveTo(x, y);
         ctx.lineTo(x + size, y);
         ctx.lineTo(x + size / 2, y + size);
@@ -105,10 +105,10 @@ function drawRoom(roomIndex) {
     const colIndex = roomIndex % labyrinthSize;
     const isFirstCol = colIndex == 0;
     const isFirstRow = rowIndex == 0;
-    if (isFirstRow) drawWall(rowIndex, colIndex, roomIndex, 'north');
-    if (isFirstCol) drawWall(rowIndex, colIndex, roomIndex, 'west');
-    drawWall(rowIndex, colIndex, roomIndex, 'east');
-    drawWall(rowIndex, colIndex, roomIndex, 'south');
+    if (isFirstRow) drawWall(rowIndex, colIndex, roomIndex, 'opp');
+    if (isFirstCol) drawWall(rowIndex, colIndex, roomIndex, 'venstre');
+    drawWall(rowIndex, colIndex, roomIndex, 'høyre');
+    drawWall(rowIndex, colIndex, roomIndex, 'ned');
     drawCorner(rowIndex, colIndex, 0, 0);
     drawCorner(rowIndex, colIndex, 0, 1);
     drawCorner(rowIndex, colIndex, 1, 0);
@@ -118,16 +118,16 @@ function drawRoom(roomIndex) {
 function drawWall(rowIndex, colIndex, roomIndex, direction) {
     const doorKey = direction + roomIndex;
     if (openWalls[doorKey]) return;
-    const isDoorHorizontal = direction == 'north' || direction == 'south';
+    const isDoorHorizontal = direction == 'opp' || direction == 'ned';
     let x = calcWallSize(colIndex);
     let y = calcWallSize(rowIndex);
-    if (direction == 'north') { x += cornerSize; }
-    if (direction == 'west') { y += cornerSize; }
-    if (direction == 'east') {
+    if (direction == 'opp') { x += cornerSize; }
+    if (direction == 'venstre') { y += cornerSize; }
+    if (direction == 'høyre') {
         x += wallSize + cornerSize;
         y += cornerSize;
     }
-    if (direction == 'south') {
+    if (direction == 'ned') {
         y += wallSize + cornerSize;
         x += cornerSize;
     }
@@ -169,10 +169,10 @@ function shuffle(array) {
 function snuVenstre() {
     //pause(400);
     character.direction = {
-        'north': 'west',
-        'east': 'north',
-        'south': 'east',
-        'west': 'south',
+        'opp': 'venstre',
+        'høyre': 'opp',
+        'ned': 'høyre',
+        'venstre': 'ned',
     }[character.direction];
     drawLabyrinth();
     return character.direction;
@@ -181,10 +181,10 @@ function snuVenstre() {
 function snuHøyre() {
     //pause(400);
     character.direction = {
-        'north': 'east',
-        'east': 'south',
-        'south': 'west',
-        'west': 'north',
+        'opp': 'høyre',
+        'høyre': 'ned',
+        'ned': 'venstre',
+        'venstre': 'opp',
     }[character.direction];
     drawLabyrinth();
     return character.direction;
@@ -195,10 +195,10 @@ function gå() {
     if (!openWalls[character.direction + character.roomIndex]) return false;
     const position = getRowAndCol(character.roomIndex);
 
-    if (character.direction == 'north' && position.rowIndex > 0) character.roomIndex -= labyrinthSize;
-    else if (character.direction == 'west' && position.colIndex > 0) character.roomIndex -= 1;
-    else if (character.direction == 'east' && position.colIndex < labyrinthSize - 1) character.roomIndex += 1;
-    else if (character.direction == 'south' && position.rowIndex < labyrinthSize - 1) character.roomIndex += labyrinthSize;
+    if (character.direction == 'opp' && position.rowIndex > 0) character.roomIndex -= labyrinthSize;
+    else if (character.direction == 'venstre' && position.colIndex > 0) character.roomIndex -= 1;
+    else if (character.direction == 'høyre' && position.colIndex < labyrinthSize - 1) character.roomIndex += 1;
+    else if (character.direction == 'ned' && position.rowIndex < labyrinthSize - 1) character.roomIndex += labyrinthSize;
     drawLabyrinth();
     return true;
 }
