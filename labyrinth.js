@@ -123,8 +123,14 @@ function drawWall(rowIndex, colIndex, roomIndex, direction) {
     let y = calcWallSize(rowIndex);
     if (direction == 'north') { x += cornerSize; }
     if (direction == 'west') { y += cornerSize; }
-    if (direction == 'east') { x += wallSize + cornerSize; y += cornerSize; }
-    if (direction == 'south') { y += wallSize + cornerSize; x += cornerSize; }
+    if (direction == 'east') {
+        x += wallSize + cornerSize;
+        y += cornerSize;
+    }
+    if (direction == 'south') {
+        y += wallSize + cornerSize;
+        x += cornerSize;
+    }
     const width = isDoorHorizontal ? wallSize : cornerSize;
     const height = isDoorHorizontal ? cornerSize : wallSize;
     ctx.fillRect(x, y, width, height);
@@ -141,7 +147,8 @@ function calcWallSize(index) {
 }
 
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    var currentIndex = array.length,
+        temporaryValue, randomIndex;
 
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
@@ -203,10 +210,19 @@ function getRowAndCol(roomIndex) {
 }
 
 
-function pause(millis)
-{
+function pause(millis) {
     var date = new Date();
     var curDate = null;
     do { curDate = new Date(); }
-    while(curDate-date < millis);
+    while (curDate - date < millis);
+}
+
+function følgVeggx() {
+    snuHøyre();
+    if (!gå()) {
+        snuVenstre();
+        if (!gå()) {
+            snuVenstre();
+        }
+    }
 }
