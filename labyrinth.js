@@ -219,3 +219,7 @@ function følgVeggx() {
         }
     }
 }
+
+function erVedUtgang() {
+    return character.roomIndex == labyrinthSize * labyrinthSize - 1;
+}
