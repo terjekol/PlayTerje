@@ -159,17 +159,17 @@ function shuffle(array) {
     return array;
 }
 
-function snuVenstre() {
-    //pause(400);
-    character.direction = {
-        'opp': 'venstre',
-        'høyre': 'opp',
-        'ned': 'høyre',
-        'venstre': 'ned',
-    }[character.direction];
-    drawLabyrinth();
-    return character.direction;
-}
+// function snuVenstre() {
+//     //pause(400);
+//     character.direction = {
+//         'opp': 'venstre',
+//         'høyre': 'opp',
+//         'ned': 'høyre',
+//         'venstre': 'ned',
+//     }[character.direction];
+//     drawLabyrinth();
+//     return character.direction;
+// }
 
 function snuHøyre() {
     //pause(400);
