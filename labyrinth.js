@@ -1,7 +1,7 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-const labyrinthSize = 6;
-const cornerSize = 20;
+let labyrinthSize = 6;
+let cornerSize = 20;
 const wallToCornerRatio = 4;
 const directions = ['opp', 'ned', 'høyre', 'venstre'];
 const oppositeDirection = {
