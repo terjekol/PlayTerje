@@ -55,6 +55,8 @@
         let imageData = ctx.getImageData(0, 0, canvasSize, canvasSize);
         document.getElementById('numbersDiv').style.gridTemplateColumns = `repeat(${canvasSize}, 1fr)`;
 
+        var tegnPiksel = drawPixel;
+
         showNumbers();
         function showNumbers() {
             document.getElementById('numbersDiv').innerHTML =
