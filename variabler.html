@@ -13,7 +13,7 @@
     <script>
         const initalGlobals = Object.keys(window);
 
-        setInterval(drawVariables, 500);
+        const timer = setInterval(drawVariables, 500);
 
         function drawVariables(){
             document.getElementById('app').innerHTML = 
@@ -38,14 +38,14 @@
             const value = window[variableName];
             const variableValue = typeof(value)=='string' ? `'${value}'` : value;
             return `
-            <svg xmlns="http://www.w3.org/2000/svg" height="200" width="200" viewBox="0 30 100 100">
+            <svg xmlns="http://www.w3.org/2000/svg" height="200" viewBox="0 30 100 67">
                 <line x1="40" y1="75" x2="60" y2="75" stroke="gray" stroke-width="4px" />
                 <rect x="5" y="65" width="90" height="30" fill="none" stroke="gray" stroke-width="4px"/>
                 <path d="M3 63 L25 30 L75 30 L97 63 
                         L92 63 L 74 34 L 26 34 L 7 63    
                 Z" fill="gray" />
-                <text font-size="10" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="monospace">${variableValue}</text> 
-                <text font-size="10" x="50%" y="85%" dominant-baseline="middle" text-anchor="middle" font-family="monospace">${variableName}</text> 
+                <text font-size="10" x="50%" y="85%" dominant-baseline="middle" text-anchor="middle" font-family="monospace">${variableValue}</text> 
+                <text font-size="10" x="50%" y="128%" dominant-baseline="middle" text-anchor="middle" font-family="monospace">${variableName}</text> 
             </svg>                        
             `;
         }
