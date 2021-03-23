@@ -19,7 +19,7 @@
             document.getElementById('app').innerHTML = 
                 getGlobalVariables()
                 .map(createDrawerHtml)
-                .join();
+                .join('');
         }
 
         function getGlobalVariables() {
