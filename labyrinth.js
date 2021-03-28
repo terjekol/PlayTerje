@@ -185,7 +185,7 @@ function shuffle(array) {
 // }
 
 function snuHøyre() {
-    const model = global.model;
+    const model = globals.model;
     //pause(400);
     model.character.direction = {
         'opp': 'høyre',
@@ -198,7 +198,7 @@ function snuHøyre() {
 }
 
 function gå() {
-    const model = global.model;
+    const model = globals.model;
     //pause(400);
     if (!model.openWalls[model.character.direction + model.character.roomIndex]) return false;
     const position = getRowAndCol(model.character.roomIndex);
@@ -212,7 +212,7 @@ function gå() {
 }
 
 function getRowAndCol(roomIndex) {
-    const model = global.model;
+    const model = globals.model;
     const rowIndex = Math.floor(roomIndex / model.labyrinthSize);
     const colIndex = roomIndex % model.labyrinthSize;
     return { rowIndex, colIndex };
@@ -237,6 +237,6 @@ function følgVeggx() {
 }
 
 function erVedUtgang() {
-    const model = global.model;
+    const model = globals.model;
     return model.character.roomIndex == model.labyrinthSize * model.labyrinthSize - 1;
 }
