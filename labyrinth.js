@@ -1,6 +1,6 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-let labyrinthSize = 6;
+let labyrinthSize;
 let cornerSize = 20;
 const wallToCornerRatio = 4;
 const directions = ['opp', 'ned', 'høyre', 'venstre'];
@@ -10,14 +10,10 @@ const oppositeDirection = {
     'venstre': 'høyre',
     'høyre': 'venstre',
 };
-const roomCount = labyrinthSize * labyrinthSize;
+let roomCount;
 const openWalls = {};
-openWalls['opp0'] = true;
-openWalls['ned' + (roomCount - 1)] = true;
 const wallSize = cornerSize * wallToCornerRatio;
-const pixels = calcWallSize(labyrinthSize + 1);
-canvas.setAttribute('width', pixels);
-canvas.setAttribute('height', pixels);
+let pixels;
 let character = {
     roomIndex: 0,
     direction: 'ned',
@@ -25,8 +21,17 @@ let character = {
 const commandQueue = [];
 const timer = null;
 
-generateLabyrinth();
-drawLabyrinth();
+function init(size) {
+    labyrinthSize = size;
+    roomCount = labyrinthSize * labyrinthSize;
+    openWalls['opp0'] = true;
+    openWalls['ned' + (roomCount - 1)] = true;
+    pixels = calcWallSize(labyrinthSize + 1);
+    canvas.setAttribute('width', pixels);
+    canvas.setAttribute('height', pixels);
+    generateLabyrinth();
+    drawLabyrinth();
+}
 
 function generateLabyrinth() {
     const rooms = [];

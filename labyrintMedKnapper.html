@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labyrint</title>
+    <style>
+        button {
+            font-size: 200%;
+        }
+
+        #log {
+            font-family: monospace;
+            font-size: 200%;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="run('gå()')">Gå</button>
+    <button onclick="run('snuHøyre()')">Snu høyre</button>
+    <button onclick="run('erVedUtgang()')">Er ved utgang?</button>
+    <div id="log"></div>
+    <br />
+    <canvas id="myCanvas"></canvas>
+    <script src="labyrinth.js"></script>
+    <script>
+        const log = document.getElementById('log');
+        init(3);
+
+        function run(code){
+            const returnValue = eval(code);
+            log.innerHTML = `
+                <span style="color: gray">Kommando: &nbsp;</span>
+                ${code}
+                <br/>
+                <span style="color: gray">Returverdi: </span>${returnValue}
+                `;
+        }
+    </script>
+</body>
+
+</html>
