@@ -7,54 +7,130 @@
     <title>Labyrint</title>
     <style>
         button {
-            font-size: 200%;
+            font-size: 150%;
         }
 
-        .log {
+        pre {
+            font-size: 150%;
+        }
+
+        .code {
             font-family: monospace;
-            font-size: 200%;
+            font-size: 150%;
+        }
+
+        .customCommands {
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+        }
+
+        .customCommand {
+            padding: 2vmin;
+            margin-right: 2vmin;
+            border: 1vmin dashed gray;
+
+        }
+
+        .page {
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
         }
     </style>
 </head>
 
 <body>
-    <div id="panel"></div>
-    <canvas id="myCanvas"></canvas>
+    <div class="page">
+        <div><canvas id="myCanvas"></canvas></div>
+        <div id="panel"></div>
+    </div>
     <script src="labyrinth.js"></script>
     <script>
-        const log = document.getElementById('log');
-        init(3);
-        updateView();
+        localInit();
+
+        function localInit() {
+            init(3);
+            const model = globals.model;
+            model.customCommands = [
+                {
+                    name: 'Snu venstre',
+                    codeName: 'snuVenstre',
+                    commands: [
+                        {
+                            type: 'call',
+                            command: 'snuHøyre',
+                        },
+                        {
+                            type: 'call',
+                            command: 'snuHøyre',
+                        },
+                        {
+                            type: 'call',
+                            command: 'snuHøyre',
+                        },
+                    ],
+                },
+            ];
+            updateView();
+        }
 
         function run(code) {
             const model = globals.model;
             model.lastCommand = { code };
-            model.lastCommand.returnValue = quotify(eval(code));            
+            model.lastCommand.returnValue = quotify(eval(code));
             updateView();
         }
 
-        function quotify(value){
-            return typeof(value)==='string' ? `'${value}'` : value;
+        function quotify(value) {
+            return typeof (value) === 'string' ? `'${value}'` : value;
         }
 
         function updateView() {
+            const model = globals.model;
             document.getElementById('panel').innerHTML = `
+                <h1>Innebygde kommandoer</h1>
                 <button onclick="run('gå()')">Gå</button>
                 <button onclick="run('snuHøyre()')">Snu høyre</button>
                 <button onclick="run('erVedUtgang()')">Er ved utgang?</button>
                 <br/>
-                ${createLastCodeHtml()}
+                ${createLastCodeHtml(
+                model.lastCommand ? model.lastCommand.code : '',
+                model.lastCommand ? model.lastCommand.returnValue : '')}
+                <h1>Egne kommandoer</h1>
+                <div class="customCommands">
+                    ${model.customCommands.map(createCustomCommandHtml).join('')}
+                    <div class="customCommand">
+                    <button>+</button>
+                </div>
+                </div>
+                <hr/>
             `;
         }
 
-        function createLastCodeHtml() {
-            const model = globals.model;
-            if (!model.lastCommand) return '';
-            return `<div class="log">
+        function createCustomCommandHtml(customCommand) {
+            return `
+                <div class="customCommand">
+                    <button>${customCommand.name}</button>
+                    <pre>${createJavaScriptFunction(customCommand)}</pre>
+                </div>
+                `;
+        }
+
+        function createJavaScriptFunction(customCommand) {
+            return `function ${customCommand.codeName}() {\n`
+                + customCommand.commands.map(
+                    codeCommand => `  ${codeCommand.command}()\n`)
+                    .join('')
+                + '}\n';
+        }
+
+        function createLastCodeHtml(command, returnValue) {
+            return `<div class="code">
                         <span style="color: gray">Kommando: &nbsp;</span>
-                        ${model.lastCommand.code}
+                        ${command}
                         <br/>
-                        <span style="color: gray">Returverdi: </span>${model.lastCommand.returnValue}
+                        <span style="color: gray">Returverdi: </span>${returnValue}
                     </div>
                 `;
         }
