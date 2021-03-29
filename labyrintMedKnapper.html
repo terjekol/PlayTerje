@@ -10,6 +10,11 @@
             font-size: 150%;
         }
 
+        button.command{
+            background-color: darkblue;
+            color: whitesmoke;
+        }
+
         pre {
             font-size: 150%;
         }
@@ -28,7 +33,7 @@
         .customCommand {
             padding: 2vmin;
             margin-right: 2vmin;
-            border: 1vmin dashed gray;
+            border: 0.5vmin dashed gray;
 
         }
 
@@ -90,9 +95,9 @@
             const model = globals.model;
             document.getElementById('panel').innerHTML = `
                 <h1>Innebygde kommandoer</h1>
-                <button onclick="run('gå()')">Gå</button>
-                <button onclick="run('snuHøyre()')">Snu høyre</button>
-                <button onclick="run('erVedUtgang()')">Er ved utgang?</button>
+                <button class="command" onclick="run('gå()')">Gå</button>
+                <button class="command" onclick="run('snuHøyre()')">Snu høyre</button>
+                <button class="command" onclick="run('erVedUtgang()')">Er ved utgang?</button>
                 <br/>
                 ${createLastCodeHtml(
                 model.lastCommand ? model.lastCommand.code : '',
@@ -111,7 +116,7 @@
         function createCustomCommandHtml(customCommand) {
             return `
                 <div class="customCommand">
-                    <button>${customCommand.name}</button>
+                    <button class="command" onclick="runCustomCommand('${customCommand.name}')">${customCommand.name}</button>
                     <pre>${createJavaScriptFunction(customCommand)}</pre>
                 </div>
                 `;
