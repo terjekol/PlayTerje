@@ -105,9 +105,11 @@
                 <h1>Egne kommandoer</h1>
                 <div class="customCommands">
                     ${model.customCommands.map(createCustomCommandHtml).join('')}
-                    <div class="customCommand">
-                    <button>+</button>
-                </div>
+                    <div class="customCommand" style="align-self: stretch">
+                        <div style="display: flex; align-items: center; height: 100%">
+                            <button>+</button>
+                        </div>
+                    </div>
                 </div>
                 <hr/>
             `;
@@ -117,9 +119,9 @@
             return `
                 <div class="customCommand">
                     <button class="command" onclick="runCustomCommand('${customCommand.name}')">${customCommand.name}</button>
+                    <pre>${createJavaScriptFunction(customCommand)}</pre>
                     <button>Endre</button>
                     <button>Slett</button>
-                    <pre>${createJavaScriptFunction(customCommand)}</pre>
                 </div>
                 `;
         }
