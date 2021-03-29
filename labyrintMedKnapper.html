@@ -10,7 +10,7 @@
             font-size: 200%;
         }
 
-        #log {
+        .log {
             font-family: monospace;
             font-size: 200%;
         }
@@ -18,24 +18,40 @@
 </head>
 
 <body>
-    <button onclick="run('gå()')">Gå</button>
-    <button onclick="run('snuHøyre()')">Snu høyre</button>
-    <button onclick="run('erVedUtgang()')">Er ved utgang?</button>
-    <div id="log"></div>
-    <br />
+    <div id="panel"></div>
     <canvas id="myCanvas"></canvas>
     <script src="labyrinth.js"></script>
     <script>
         const log = document.getElementById('log');
         init(3);
+        updateView();
 
-        function run(code){
-            const returnValue = eval(code);
-            log.innerHTML = `
-                <span style="color: gray">Kommando: &nbsp;</span>
-                ${code}
+        function run(code) {
+            const model = globals.model;
+            model.lastCommand = { code };
+            model.lastCommand.returnValue = eval(code);
+            updateView();
+        }
+
+        function updateView() {
+            document.getElementById('panel').innerHTML = `
+                <button onclick="run('gå()')">Gå</button>
+                <button onclick="run('snuHøyre()')">Snu høyre</button>
+                <button onclick="run('erVedUtgang()')">Er ved utgang?</button>
                 <br/>
-                <span style="color: gray">Returverdi: </span>${returnValue}
+                ${createLastCodeHtml()}
+            `;
+        }
+
+        function createLastCodeHtml() {
+            const model = globals.model;
+            if (!model.lastCommand) return '';
+            return `<div class="log">
+                        <span style="color: gray">Kommando: &nbsp;</span>
+                        ${model.lastCommand.code}
+                        <br/>
+                        <span style="color: gray">Returverdi: </span>${model.lastCommand.returnValue}
+                    </div>
                 `;
         }
     </script>
