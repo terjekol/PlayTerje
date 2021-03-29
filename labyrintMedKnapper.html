@@ -29,8 +29,12 @@
         function run(code) {
             const model = globals.model;
             model.lastCommand = { code };
-            model.lastCommand.returnValue = eval(code);
+            model.lastCommand.returnValue = quotify(eval(code));            
             updateView();
+        }
+
+        function quotify(value){
+            return typeof(value)==='string' ? `'${value}'` : value;
         }
 
         function updateView() {
