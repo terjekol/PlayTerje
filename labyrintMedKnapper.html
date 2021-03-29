@@ -7,12 +7,12 @@
     <title>Labyrint</title>
     <style>
         button {
-            font-size: 150%;
         }
 
         button.command{
-            background-color: darkblue;
-            color: whitesmoke;
+            font-size: 150%;
+            background-color: green;
+            color: white;
         }
 
         pre {
@@ -117,6 +117,8 @@
             return `
                 <div class="customCommand">
                     <button class="command" onclick="runCustomCommand('${customCommand.name}')">${customCommand.name}</button>
+                    <button>Endre</button>
+                    <button>Slett</button>
                     <pre>${createJavaScriptFunction(customCommand)}</pre>
                 </div>
                 `;
