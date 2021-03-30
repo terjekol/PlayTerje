@@ -154,10 +154,13 @@
         }
 
         function createJavaScriptFunction(customCommand) {
+            const buttonFunc = (labelTxt, defaultTxt) => customCommand.isInEditMode ? `<button>${labelTxt}</button>\n` : defaultTxt || '';
+
             return `function ${customCommand.codeName}() {\n`
                 + customCommand.commands.map(
-                    codeCommand => `  ${codeCommand.command}() ${customCommand.isInEditMode ? '<button>velg</button>': ''}\n`)
+                    codeCommand => `  ${buttonFunc('+')}  ${codeCommand.command}() ${buttonFunc('velg', '\n')}`)
                     .join('')
+                + `  ${buttonFunc('+')}`
                 + '}\n';
         }
 
@@ -196,7 +199,7 @@
 
         function toCamelCase(str) {
             return str.split(' ').map(function (word, index) {
-                return index == 0 ? word.toLowerCase() :  word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                return index == 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
             }).join('');
         }
     </script>
