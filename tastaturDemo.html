@@ -29,6 +29,14 @@
             color: darkred;
             font-weight: bolder;
         }
+        
+        button.code {
+            font-family: monospace;
+        }
+
+        button.italic{
+            font-style: italic;
+        }
     </style>
 </head>
 
@@ -50,11 +58,28 @@
         function updateView() {
             document.getElementById('app').innerHTML = `
                 <pre>${model.lines.map(formatCodeLine).join('')}</pre>
-                <button onclick="moveSelection(-1)">▲</button>
-                <button onclick="moveSelection(1)">▼</button>
-                <button class="add" onclick="addLine()">↵</button>
-                <button class="delete" onclick="deleteLine()">×</button>
+                <div>
+                    <button onclick="moveSelection(-1)">▲</button>
+                    <button onclick="moveSelection(1)">▼</button>
+                    <button class="add" onclick="addLine()">↵</button>
+                    <button class="delete" onclick="deleteLine()">×</button>
+                </div>
+                ${createCommandsHtml()}
                 `;
+        }
+
+        function createCommandsHtml(){
+            const lineObj = model.lines[model.selectedLineIndex];
+            if (!lineObj.edit) return '';
+            return `
+                <div>
+                    <button class="code" onclick="changeLine(this.innerHTML)">gå()</button>
+                    <button class="code" onclick="changeLine(this.innerHTML)">snuHøyre()</button>
+                    <button class="code" onclick="changeLine(this.innerHTML)">erVedUtgang()</button>
+                    <button class="code italic" onclick="changeLine(this.innerHTML)">if</button>
+                    <button class="code italic" onclick="changeLine(this.innerHTML)">while</button>
+                </div>
+            `;
         }
 
         function formatCodeLine(lineObj, index) {
@@ -81,6 +106,13 @@
             if (model.selectedLineIndex === model.lines.length - 1) return;
             model.lines.splice(model.selectedLineIndex + 1, 0, { code: '', edit: true });
             model.selectedLineIndex++;
+            updateView();
+        }
+
+        function changeLine(code){
+            const lineObj = model.lines[model.selectedLineIndex];
+            if (!lineObj.edit) return;
+            model.lines[model.selectedLineIndex].code = '  ' + code;
             updateView();
         }
 
