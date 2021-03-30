@@ -154,13 +154,15 @@
         }
 
         function createJavaScriptFunction(customCommand) {
-            const buttonFunc = (labelTxt, defaultTxt) => customCommand.isInEditMode ? `<button>${labelTxt}</button>\n` : defaultTxt || '';
+            const buttonFunc = (labelTxt, onclick, index, defaultTxt) => customCommand.isInEditMode
+                ? `<button onclick="${onclick}Command(${index})">${labelTxt}</button>\n`
+                : defaultTxt || '';
 
             return `function ${customCommand.codeName}() {\n`
                 + customCommand.commands.map(
-                    codeCommand => `  ${buttonFunc('+')}  ${codeCommand.command}() ${buttonFunc('velg', '\n')}`)
+                    (codeCommand,index) => `  ${buttonFunc('+', 'add', index)}  ${codeCommand.command}() ${buttonFunc('velg', 'select', index, '\n')}`)
                     .join('')
-                + `  ${buttonFunc('+')}`
+                + `  ${buttonFunc('+', 'add', customCommand.commands.length)}`
                 + '}\n';
         }
 
