@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        pre {
+            font-size: 150%;
+            width: 300px;
+        }
+        button{
+            font-size: 150%;
+        }
+        .selected{
+            background-color: palegoldenrod;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        const model = {
+            selectedLine: 1,
+            lines: [
+                'function dummy() {',
+                '',
+                '}',
+            ],
+        };
+
+        updateView();
+        function updateView(){
+            document.getElementById('app').innerHTML = `
+                <pre>${model.lines.map(formatCodeLine).join('')}</pre>
+                <button onclick="moveSelection(-1)">▲</button>
+                <button onclick="moveSelection(1)">▼</button>
+                `;
+        }
+
+        function formatCodeLine(line, index){
+            if(model.selectedLine != index) return line + '\n';
+            return `<div class="selected">&nbsp;</div>`;
+        }
+
+    </script>
+</body>
+
+</html>

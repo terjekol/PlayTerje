@@ -1,0 +1,41 @@
+button.command {
+    font-size: 150%;
+    background-color: green;
+    color: white;
+}
+
+input {
+    font-size: 150%;
+}
+
+button.nonCommand {
+    font-size: small;
+}
+
+pre {
+    font-size: 150%;
+}
+
+.code {
+    font-family: monospace;
+    font-size: 150%;
+}
+
+.customCommands {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.customCommand {
+    padding: 2vmin;
+    margin-right: 2vmin;
+    border: 0.5vmin dashed gray;
+
+}
+
+.page {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}

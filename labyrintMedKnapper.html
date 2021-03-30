@@ -5,49 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Labyrint</title>
-    <style>
-        button.command {
-            font-size: 150%;
-            background-color: green;
-            color: white;
-        }
-
-        input {
-            font-size: 150%;
-        }
-
-        button.nonCommand {
-            font-size: small;
-        }
-
-        pre {
-            font-size: 150%;
-        }
-
-        .code {
-            font-family: monospace;
-            font-size: 150%;
-        }
-
-        .customCommands {
-            display: flex;
-            flex-direction: row;
-            justify-content: start;
-        }
-
-        .customCommand {
-            padding: 2vmin;
-            margin-right: 2vmin;
-            border: 0.5vmin dashed gray;
-
-        }
-
-        .page {
-            display: flex;
-            flex-direction: row;
-            justify-content: start;
-        }
-    </style>
+    <link rel="stylesheet" href="css/labyrint.css"/>
 </head>
 
 <body>
@@ -160,7 +118,7 @@
 
             return `function ${customCommand.codeName}() {\n`
                 + customCommand.commands.map(
-                    (codeCommand,index) => `  ${buttonFunc('+', 'add', index)}  ${codeCommand.command}() ${buttonFunc('velg', 'select', index, '\n')}`)
+                    (codeCommand,index) => `  ${buttonFunc('+', 'add', index)}  ${codeCommand.command}() ${buttonFunc('×', 'select', index, '\n')}`)
                     .join('')
                 + `  ${buttonFunc('+', 'add', customCommand.commands.length)}`
                 + '}\n';
