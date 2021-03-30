@@ -11,12 +11,23 @@
             font-size: 150%;
             width: 300px;
         }
-        button{
+
+        button {
             font-size: 150%;
         }
-        .selected{
+
+        .selected {
             background-color: palegoldenrod;
-            color: white;
+        }
+
+        button.add {
+            color: darkgreen;
+            font-weight: bolder;
+        }
+
+        button.delete {
+            color: darkred;
+            font-weight: bolder;
         }
     </style>
 </head>
@@ -24,27 +35,53 @@
 <body>
     <div id="app"></div>
     <script>
+        // view
         const model = {
-            selectedLine: 1,
+            selectedLineIndex: 1,
             lines: [
-                'function dummy() {',
-                '',
-                '}',
+                { code: 'function dummy() {' },
+                { code: '', edit: true },
+                { code: '}' },
             ],
         };
 
+        // view
         updateView();
-        function updateView(){
+        function updateView() {
             document.getElementById('app').innerHTML = `
                 <pre>${model.lines.map(formatCodeLine).join('')}</pre>
                 <button onclick="moveSelection(-1)">▲</button>
                 <button onclick="moveSelection(1)">▼</button>
+                <button class="add" onclick="addLine()">↵</button>
+                <button class="delete" onclick="deleteLine()">×</button>
                 `;
         }
 
-        function formatCodeLine(line, index){
-            if(model.selectedLine != index) return line + '\n';
-            return `<div class="selected">&nbsp;</div>`;
+        function formatCodeLine(lineObj, index) {
+            if (model.selectedLineIndex != index) return lineObj.code + '\n';
+            return `<div class="selected">${lineObj.code || '&nbsp;'}</div>`;
+        }
+
+        // controller
+        function moveSelection(deltaIndex) {
+            const l = model.lines.length;
+            model.selectedLineIndex += deltaIndex + l;
+            model.selectedLineIndex %= l;
+            updateView();
+        }
+
+        function deleteLine() {
+            const lineObj = model.lines[model.selectedLineIndex];
+            if (!lineObj.edit) return;
+            model.lines.splice(model.selectedLineIndex, 1);
+            updateView();
+        }
+
+        function addLine() {
+            if (model.selectedLineIndex === model.lines.length - 1) return;
+            model.lines.splice(model.selectedLineIndex + 1, 0, { code: '', edit: true });
+            model.selectedLineIndex++;
+            updateView();
         }
 
     </script>
