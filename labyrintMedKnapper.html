@@ -156,7 +156,7 @@
         function createJavaScriptFunction(customCommand) {
             return `function ${customCommand.codeName}() {\n`
                 + customCommand.commands.map(
-                    codeCommand => `  ${codeCommand.command}()\n`)
+                    codeCommand => `  ${codeCommand.command}() ${customCommand.isInEditMode ? '<button>velg</button>': ''}\n`)
                     .join('')
                 + '}\n';
         }
