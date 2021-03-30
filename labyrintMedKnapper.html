@@ -6,13 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Labyrint</title>
     <style>
-        button {
-        }
-
-        button.command{
+        button.command {
             font-size: 150%;
             background-color: green;
             color: white;
+        }
+
+        input {
+            font-size: 150%;
+        }
+
+        button.nonCommand {
+            font-size: small;
         }
 
         pre {
@@ -107,21 +112,43 @@
                     ${model.customCommands.map(createCustomCommandHtml).join('')}
                     <div class="customCommand" style="align-self: stretch">
                         <div style="display: flex; align-items: center; height: 100%">
-                            <button>+</button>
+                            <button class="nonCommand">+</button>
                         </div>
                     </div>
                 </div>
-                <hr/>
             `;
+            if (model.requestFocus) {
+                const inputTag = document.getElementById(model.requestFocus.name);
+                inputTag.focus();
+                inputTag.setSelectionRange(model.requestFocus.selectionStart, model.requestFocus.selectionEnd);
+                model.requestFocus = null;
+            }
         }
 
-        function createCustomCommandHtml(customCommand) {
+        function createCustomCommandHtml(customCommand, index) {
+            const isInEditMode = globals.model.customCommands[index].isInEditMode;
+            const preHtml = isInEditMode ? `
+                <input id="commandName" type="text" value="${customCommand.name}" oninput="editCommandName(this, ${index})"/><br/>
+            `: `
+                <button 
+                    class="command" 
+                    onclick="runCustomCommand('${customCommand.name}')"
+                    >
+                    ${customCommand.name}
+                </button>            
+            `;
+            const postHtml = isInEditMode ? `
+                <button onclick="editCustomCommand(${index}, false)">Avslutt redigering</button>
+                `: `
+                <button onclick="editCustomCommand(${index}, true)">Rediger</button>
+                <button onclick="deleteCustomCommand(${index})">Slett</button>
+                `;
+
             return `
                 <div class="customCommand">
-                    <button class="command" onclick="runCustomCommand('${customCommand.name}')">${customCommand.name}</button>
+                    ${preHtml}                    
                     <pre>${createJavaScriptFunction(customCommand)}</pre>
-                    <button>Endre</button>
-                    <button>Slett</button>
+                    ${postHtml}
                 </div>
                 `;
         }
@@ -142,6 +169,35 @@
                         <span style="color: gray">Returverdi: </span>${returnValue}
                     </div>
                 `;
+        }
+
+        // controller
+        function editCustomCommand(index, isInEditMode) {
+            globals.model.customCommands[index].isInEditMode = isInEditMode;
+            updateView();
+        }
+
+        function deleteCustomCommand(index) {
+            globals.model.customCommands.splice(index, 1);
+            updateView();
+        }
+
+        function editCommandName(inputTag, index) {
+            const customCommand = globals.model.customCommands[index];
+            customCommand.name = inputTag.value;
+            customCommand.codeName = toCamelCase(inputTag.value);
+            globals.model.requestFocus = {
+                name: inputTag.id,
+                selectionStart: inputTag.selectionStart,
+                selectionEnd: inputTag.selectionEnd,
+            };
+            updateView();
+        }
+
+        function toCamelCase(str) {
+            return str.split(' ').map(function (word, index) {
+                return index == 0 ? word.toLowerCase() :  word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+            }).join('');
         }
     </script>
 </body>
