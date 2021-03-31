@@ -8,12 +8,18 @@
     <title>Document</title>
     <style>
         pre {
-            font-size: 150%;
+            font-size: 3.5vmin;
             width: 300px;
         }
 
+        select {
+            font-family: monospace;
+            font-size: 3.5vmin;
+            background-color: rgb(247, 244, 213);
+        }
+
         button {
-            font-size: 150%;
+            font-size: 3.5vmin;
         }
 
         .selected {
@@ -93,13 +99,20 @@
         function formatCodeLine(state, lineObj, index) {
             if (lineObj.code === '}') state.currentLevel--;
             state.HTML += indent(state.currentLevel);
-            if (model.selectedLineIndex != index) {
-                state.HTML += lineObj.code + '\n';
-            } else {
-                state.HTML += `<span class="selected">${lineObj.code || '&nbsp;'}</span>\n`;
-            }
+            const isSelected = model.selectedLineIndex === index;
+            const code = getCode(lineObj, index, isSelected);
+            state.HTML += !isSelected ? code + '\n' :
+                `<span class="selected">${code || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span>\n`;
             if (lineObj.endOfBlock || index === 0) state.currentLevel++;
             return state;
+        }
+
+        function getCode(lineObj, index, isSelected) {
+            if (!lineObj.endOfBlock) return lineObj.code;
+            if (!isSelected) return `${lineObj.code}(${lineObj.criteria}) {`;
+            return `${lineObj.code}(<select onchange="changeLogicalExpression(${index}, this.value)">${model.booleanExpressions.map(expr => `
+                    <option ${expr === lineObj.criteria ? 'selected' : ''}>${expr}</option>    
+                    `).join('')}</select>) {`;
         }
 
         function indent(level) {
@@ -133,7 +146,7 @@
             if (code != 'if' && code != 'while') {
                 model.lines.splice(model.selectedLineIndex, 0, { code: code, edit: true, });
             } else {
-                const firstLine = { code: code + '(false) {', edit: true, };
+                const firstLine = { code: code, edit: true, criteria: 'false' };
                 const middleLine = { code: '', edit: true, };
                 const lastLine = { code: '}', };
                 firstLine.endOfBlock = lastLine;
@@ -151,6 +164,10 @@
             }
             const indexEndOfBlock = model.lines.indexOf(lineObj.endOfBlock);
             model.lines.splice(model.selectedLineIndex, 1 + indexEndOfBlock - model.selectedLineIndex);
+        }
+
+        function changeLogicalExpression(lineIndex, newValue) {
+            model.lines[lineIndex].criteria = newValue;
         }
 
     </script>
