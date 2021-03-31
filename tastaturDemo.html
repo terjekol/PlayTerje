@@ -57,8 +57,9 @@
         updateView();
         function updateView() {
             const lineObj = model.lines[model.selectedLineIndex];
+            const startState = { HTML: '', currentLevel: 0, };
             document.getElementById('app').innerHTML = `
-                <pre>${model.lines.map(formatCodeLine).join('')}</pre>
+                <pre>${model.lines.reduce(formatCodeLine, startState).HTML}</pre>
                 <div>
                     <button onclick="moveSelection(-1)">▲</button>
                     <button onclick="moveSelection(1)">▼</button>
@@ -83,9 +84,20 @@
             `;
         }
 
-        function formatCodeLine(lineObj, index) {
-            if (model.selectedLineIndex != index) return lineObj.code + '\n';
-            return `<div class="selected">${lineObj.code || '&nbsp;'}</div>`;
+        function formatCodeLine(state, lineObj, index) {
+            if (lineObj.code === '}') state.currentLevel--;
+            state.HTML += indent(state.currentLevel);
+            if (model.selectedLineIndex != index) {
+                state.HTML += lineObj.code + '\n';
+            } else {
+                state.HTML += `<span class="selected">${lineObj.code || '&nbsp;'}</span>\n`;
+            }
+            if (lineObj.endOfBlock || index === 0) state.currentLevel++;
+            return state;
+        }
+
+        function indent(level) {
+            return ''.padEnd(level * 2, ' ');
         }
 
         // controller
