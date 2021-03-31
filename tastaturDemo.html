@@ -29,12 +29,12 @@
             color: darkred;
             font-weight: bolder;
         }
-        
+
         button.code {
             font-family: monospace;
         }
 
-        button.italic{
+        button.italic {
             font-style: italic;
         }
     </style>
@@ -56,19 +56,20 @@
         // view
         updateView();
         function updateView() {
+            const lineObj = model.lines[model.selectedLineIndex];
             document.getElementById('app').innerHTML = `
                 <pre>${model.lines.map(formatCodeLine).join('')}</pre>
                 <div>
                     <button onclick="moveSelection(-1)">▲</button>
                     <button onclick="moveSelection(1)">▼</button>
-                    <button class="add" onclick="addLine()">↵</button>
-                    <button class="delete" onclick="deleteLine()">×</button>
+                    ${model.selectedLineIndex == model.lines.length - 1 ? '' : '<button class="add" onclick="addLine()">↵</button>'}
+                    ${lineObj.edit ? '<button class="delete" onclick="deleteLine()">×</button>' : ''}
                 </div>
                 ${createCommandsHtml()}
                 `;
         }
 
-        function createCommandsHtml(){
+        function createCommandsHtml() {
             const lineObj = model.lines[model.selectedLineIndex];
             if (!lineObj.edit) return '';
             return `
@@ -96,9 +97,7 @@
         }
 
         function deleteLine() {
-            const lineObj = model.lines[model.selectedLineIndex];
-            if (!lineObj.edit) return;
-            model.lines.splice(model.selectedLineIndex, 1);
+            removeExistingLine();
             updateView();
         }
 
@@ -109,11 +108,31 @@
             updateView();
         }
 
-        function changeLine(code){
+        function changeLine(code) {
             const lineObj = model.lines[model.selectedLineIndex];
             if (!lineObj.edit) return;
-            model.lines[model.selectedLineIndex].code = '  ' + code;
+            removeExistingLine();
+            if (code != 'if' && code != 'while') {
+                model.lines.splice(model.selectedLineIndex, 0, { code: code, edit: true, });
+            } else {
+                const firstLine = { code: code + '(false) {', edit: true, };
+                const middleLine = { code: '', edit: true, };
+                const lastLine = { code: '}', };
+                firstLine.endOfBlock = lastLine;
+                model.lines.splice(model.selectedLineIndex, 0, firstLine, middleLine, lastLine);
+            }
             updateView();
+        }
+
+        function removeExistingLine() {
+            const lineObj = model.lines[model.selectedLineIndex];
+            if (!lineObj.edit) return;
+            if (!lineObj.endOfBlock) {
+                model.lines.splice(model.selectedLineIndex, 1);
+                return;
+            }
+            const indexEndOfBlock = model.lines.indexOf(lineObj.endOfBlock);
+            model.lines.splice(model.selectedLineIndex, 1 + indexEndOfBlock - model.selectedLineIndex);
         }
 
     </script>
