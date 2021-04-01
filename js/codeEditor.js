@@ -3,6 +3,8 @@
         constructor() {
             super();
             this.model = {
+                name: '',
+                codeName: '',
                 selectedLineIndex: 1,
                 lines: [
                     { code: 'function dummy() {' },
@@ -33,6 +35,7 @@
             const lineObj = this.model.lines[this.model.selectedLineIndex];
             const startState = { HTML: '', currentLevel: 0, };
             this.div.innerHTML = `
+                <input type="text" value="${this.model.name}" />
                 <pre>${this.model.lines.reduce(this.formatCodeLine.bind(this), startState).HTML}</pre>
                 <div>
                     <button click="this.moveSelection(-1)">▲</button>
@@ -43,14 +46,18 @@
                 ${this.createCommandsHtml()}
                 `;
             this.addEventListeners();
+            if (this.model.requestFocus) {
+                this.input.focus();
+                this.input.setSelectionRange(this.model.requestFocus.selectionStart, this.model.requestFocus.selectionEnd);
+                this.model.requestFocus = null;
+            }
         }
         removeEventListeners() {
             for (let btn of this.buttons) {
                 btn.onclick = null;
             }
-            if (this.select) {
-                this.select.onchange = null;
-            }
+            if (this.select) this.select.onchange = null;
+            if (this.input) this.input.oninput = null;
         }
         addEventListeners() {
             this.buttons = this.div.getElementsByTagName('button');
@@ -62,6 +69,8 @@
                 this.select = selects[0];
                 this.select.onchange = this.handleSelectChange.bind(this);
             }
+            this.input = this.div.getElementsByTagName('input')[0];
+            this.input.oninput = this.handleInputChange.bind(this);
         }
         createCommandsHtml() {
             const lineObj = this.model.lines[this.model.selectedLineIndex];
@@ -115,7 +124,17 @@
             const select = selectEvent.srcElement;
             this.model.lines[this.model.selectedLineIndex].criteria = select.value;
         }
-
+        handleInputChange() {
+            this.model.name = this.input.value;            
+            this.model.codeName = toCamelCase(this.input.value);
+            console.log(this.model.name, this.model.codeName, this.model);
+            this.model.requestFocus = {
+                selectionStart: this.input.selectionStart,
+                selectionEnd: this.input.selectionEnd,
+            };
+            this.model.lines[0].code = `function ${this.model.codeName}() {`;
+            this.updateView();
+        }
         changeLine(code) {
             const lineObj = this.model.lines[this.model.selectedLineIndex];
             if (!lineObj.edit) return;
@@ -164,6 +183,11 @@
     }
     customElements.define('code-editor', CodeEditor);
 
+    function toCamelCase(str) {
+        return str.split(' ').map(function (word, index) {
+            return index == 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }).join('');
+    }
     function getStyle() {
         return `
             pre {
@@ -204,6 +228,10 @@
 
             button.italic {
                 font-style: italic;
+            }
+
+            input {
+                font-size: 150%;
             }
         `;
     }
