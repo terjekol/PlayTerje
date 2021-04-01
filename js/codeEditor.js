@@ -23,36 +23,51 @@
             this.attachShadow({ mode: 'open' });
             this.shadowRoot.appendChild(style);
             this.shadowRoot.appendChild(this.div);
+            this.buttons = [];
             this.updateView();
         }
         updateView() {
-            // if (this.button) this.button.onclick = null;
-            // this.shadowRoot.innerHTML = `<h1>${this.count}</h1><button id="myButton">+</button>`;
-            // this.button = this.shadowRoot.getElementById('myButton');
-            // this.button.onclick = () => this.buttonClick();
+            this.removeButtonEventListeners();
             const lineObj = this.model.lines[this.model.selectedLineIndex];
             const startState = { HTML: '', currentLevel: 0, };
             this.div.innerHTML = `
-                <pre>${this.model.lines.reduce((state, lineObj, index) => this.formatCodeLine(state, lineObj, index), startState).HTML}</pre>
+                <pre>${this.model.lines.reduce(this.formatCodeLine.bind(this), startState).HTML}</pre>
                 <div>
-                    <button onclick="moveSelection(-1)">▲</button>
-                    <button onclick="moveSelection(1)">▼</button>
-                    ${this.model.selectedLineIndex == this.model.lines.length - 1 ? '' : '<button class="add" onclick="addLine()">↵</button>'}
-                    ${lineObj.edit ? '<button class="delete" onclick="deleteLine()">×</button>' : ''}
+                    <button click="moveSelection(-1)">▲</button>
+                    <button click="moveSelection(1)">▼</button>
+                    ${this.model.selectedLineIndex == this.model.lines.length - 1 ? '' : '<button class="add" click="addLine()">↵</button>'}
+                    ${lineObj.edit ? '<button class="delete" click="deleteLine()">×</button>' : ''}
                 </div>
                 ${this.createCommandsHtml()}
                 `;
+                this.addButtonEventListeners();
+        }
+        removeButtonEventListeners(){
+            for(let btn of this.buttons) {
+                btn.onclick = null;
+            }
+        }
+        addButtonEventListeners(){
+            this.buttons = this.div.getElementsByTagName('button');
+            for(let btn of this.buttons) {
+                btn.onclick = this.handleButtonClick.bind(this);
+            }
+        }
+        handleButtonClick(clickEvent){
+            const btn = clickEvent.srcElement;
+            const click = btn.getAttribute('click');
+            eval(click);
         }
         createCommandsHtml() {
             const lineObj = this.model.lines[this.model.selectedLineIndex];
             if (!lineObj.edit) return '';
             return `
                 <div>
-                    <button class="code" onclick="changeLine(this.innerHTML)">gå()</button>
-                    <button class="code" onclick="changeLine(this.innerHTML)">snuHøyre()</button>
-                    <button class="code" onclick="changeLine(this.innerHTML)">erVedUtgang()</button>
-                    <button class="code italic" onclick="changeLine(this.innerHTML)">if</button>
-                    <button class="code italic" onclick="changeLine(this.innerHTML)">while</button>
+                    <button class="code" click="this.changeLine(btn.innerHTML)">gå()</button>
+                    <button class="code" click="this.changeLine(btn.innerHTML)">snuHøyre()</button>
+                    <button class="code" click="this.changeLine(btn.innerHTML)">erVedUtgang()</button>
+                    <button class="code italic" click="this.changeLine(btn.innerHTML)">if</button>
+                    <button class="code italic" click="this.changeLine(btn.innerHTML)">while</button>
                 </div>
             `;
         }
@@ -70,20 +85,45 @@
         getCode(lineObj, index, isSelected) {
             if (!lineObj.endOfBlock) return lineObj.code;
             if (!isSelected) return `${lineObj.code}(${lineObj.criteria}) {`;
-            return `${lineObj.code}(
-                        <select onchange="changeLogicalExpression(${index}, this.value)">
-                            ${this.model.booleanExpressions.map(expr => `
+            return `${lineObj.code}(<select onchange="changeLogicalExpression(${index}, this.value)"
+                        >${this.model.booleanExpressions.map(expr => `
                             <option ${expr === lineObj.criteria ? 'selected' : ''}>${expr}</option>    
-                            `).join('')}
-                        </select>) {`;
+                            `).join('')}</select>) {`;
         }
 
         indent(level) {
             return ''.padEnd(level * 2, ' ');
         }
-        buttonClick() {
-            this.count++;
+        // controller
+        changeLine(code) {
+            const lineObj = this.model.lines[this.model.selectedLineIndex];
+            if (!lineObj.edit) return;
+            this.removeExistingLine();
+            if (code != 'if' && code != 'while') {
+                this.model.lines.splice(this.model.selectedLineIndex, 0, { code: code, edit: true, });
+            } else {
+                const firstLine = { code: code, edit: true, criteria: 'false' };
+                const middleLine = { code: '', edit: true, };
+                const lastLine = { code: '}', };
+                firstLine.endOfBlock = lastLine;
+                this.model.lines.splice(this.model.selectedLineIndex, 0, firstLine, middleLine, lastLine);
+            }
             this.updateView();
+        }
+
+        removeExistingLine() {
+            const lineObj = this.model.lines[this.model.selectedLineIndex];
+            if (!lineObj.edit) return;
+            if (!lineObj.endOfBlock) {
+                this.model.lines.splice(this.model.selectedLineIndex, 1);
+                return;
+            }
+            const indexEndOfBlock = this.model.lines.indexOf(lineObj.endOfBlock);
+            this.model.lines.splice(model.selectedLineIndex, 1 + indexEndOfBlock - model.selectedLineIndex);
+        }
+
+        changeLogicalExpression(lineIndex, newValue) {
+            model.lines[lineIndex].criteria = newValue;
         }
     }
     customElements.define('code-editor', CodeEditor);
