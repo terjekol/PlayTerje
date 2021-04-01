@@ -17,6 +17,8 @@
                 ],
             };
 
+            document.addEventListener('keydown', this.handleKeys.bind(this));
+
             this.div = document.createElement('div');
             const style = document.createElement('style');
             style.innerHTML = getStyle();
@@ -98,16 +100,20 @@
             return ''.padEnd(level * 2, ' ');
         }
         // controller
+        handleKeys(keyEvent) {
+            if (keyEvent.code === "ArrowUp") this.moveSelection(-1);
+            else if (keyEvent.code === "ArrowDown") this.moveSelection(1);
+            else if (keyEvent.code === "Delete") this.deleteLine();
+            else if (keyEvent.code === "Enter") this.addLine();
+        }
         handleButtonClick(clickEvent) {
             const btn = clickEvent.srcElement;
             const click = btn.getAttribute('click');
             eval(click);
         }
-
-        handleSelectChange(selectEvent){
+        handleSelectChange(selectEvent) {
             const select = selectEvent.srcElement;
             this.model.lines[this.model.selectedLineIndex].criteria = select.value;
-
         }
 
         changeLine(code) {
