@@ -119,7 +119,7 @@
                 return;
             }
             const indexEndOfBlock = this.model.lines.indexOf(lineObj.endOfBlock);
-            this.model.lines.splice(model.selectedLineIndex, 1 + indexEndOfBlock - model.selectedLineIndex);
+            this.model.lines.splice(this.model.selectedLineIndex, 1 + indexEndOfBlock - this.model.selectedLineIndex);
         }
 
         changeLogicalExpression(lineIndex, newValue) {
