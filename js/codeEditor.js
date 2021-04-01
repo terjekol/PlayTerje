@@ -27,7 +27,7 @@
             this.updateView();
         }
         updateView() {
-            this.removeButtonEventListeners();
+            this.removeEventListeners();
             const lineObj = this.model.lines[this.model.selectedLineIndex];
             const startState = { HTML: '', currentLevel: 0, };
             this.div.innerHTML = `
@@ -40,23 +40,26 @@
                 </div>
                 ${this.createCommandsHtml()}
                 `;
-                this.addButtonEventListeners();
+            this.addEventListeners();
         }
-        removeButtonEventListeners(){
-            for(let btn of this.buttons) {
+        removeEventListeners() {
+            for (let btn of this.buttons) {
                 btn.onclick = null;
             }
-        }
-        addButtonEventListeners(){
-            this.buttons = this.div.getElementsByTagName('button');
-            for(let btn of this.buttons) {
-                btn.onclick = this.handleButtonClick.bind(this);
+            if (this.select) {
+                this.select.onchange = null;
             }
         }
-        handleButtonClick(clickEvent){
-            const btn = clickEvent.srcElement;
-            const click = btn.getAttribute('click');
-            eval(click);
+        addEventListeners() {
+            this.buttons = this.div.getElementsByTagName('button');
+            for (let btn of this.buttons) {
+                btn.onclick = this.handleButtonClick.bind(this);
+            }
+            const selects = this.div.getElementsByTagName('select');
+            if (selects.length > 0) {
+                this.select = selects[0];
+                this.select.onchange = this.handleSelectChange.bind(this);
+            }
         }
         createCommandsHtml() {
             const lineObj = this.model.lines[this.model.selectedLineIndex];
@@ -95,6 +98,16 @@
             return ''.padEnd(level * 2, ' ');
         }
         // controller
+        handleButtonClick(clickEvent) {
+            const btn = clickEvent.srcElement;
+            const click = btn.getAttribute('click');
+            eval(click);
+        }
+
+        handleSelectChange(selectEvent){
+            const select = selectEvent.srcElement;
+        }
+
         changeLine(code) {
             const lineObj = this.model.lines[this.model.selectedLineIndex];
             if (!lineObj.edit) return;
@@ -126,19 +139,19 @@
             model.lines[lineIndex].criteria = newValue;
         }
 
-         moveSelection(deltaIndex) {
+        moveSelection(deltaIndex) {
             const l = this.model.lines.length;
             this.model.selectedLineIndex += deltaIndex + l;
             this.model.selectedLineIndex %= l;
             this.updateView();
         }
 
-         deleteLine() {
+        deleteLine() {
             this.removeExistingLine();
             this.updateView();
         }
 
-         addLine() {
+        addLine() {
             if (this.model.selectedLineIndex === this.model.lines.length - 1) return;
             this.model.lines.splice(this.model.selectedLineIndex + 1, 0, { code: '', edit: true });
             this.model.selectedLineIndex++;
