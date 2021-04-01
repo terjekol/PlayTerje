@@ -106,6 +106,8 @@
 
         handleSelectChange(selectEvent){
             const select = selectEvent.srcElement;
+            this.model.lines[this.model.selectedLineIndex].criteria = select.value;
+
         }
 
         changeLine(code) {
@@ -133,10 +135,6 @@
             }
             const indexEndOfBlock = this.model.lines.indexOf(lineObj.endOfBlock);
             this.model.lines.splice(this.model.selectedLineIndex, 1 + indexEndOfBlock - this.model.selectedLineIndex);
-        }
-
-        changeLogicalExpression(lineIndex, newValue) {
-            model.lines[lineIndex].criteria = newValue;
         }
 
         moveSelection(deltaIndex) {
