@@ -33,10 +33,10 @@
             this.div.innerHTML = `
                 <pre>${this.model.lines.reduce(this.formatCodeLine.bind(this), startState).HTML}</pre>
                 <div>
-                    <button click="moveSelection(-1)">▲</button>
-                    <button click="moveSelection(1)">▼</button>
-                    ${this.model.selectedLineIndex == this.model.lines.length - 1 ? '' : '<button class="add" click="addLine()">↵</button>'}
-                    ${lineObj.edit ? '<button class="delete" click="deleteLine()">×</button>' : ''}
+                    <button click="this.moveSelection(-1)">▲</button>
+                    <button click="this.moveSelection(1)">▼</button>
+                    ${this.model.selectedLineIndex == this.model.lines.length - 1 ? '' : '<button class="add" click="this.addLine()">↵</button>'}
+                    ${lineObj.edit ? '<button class="delete" click="this.deleteLine()">×</button>' : ''}
                 </div>
                 ${this.createCommandsHtml()}
                 `;
@@ -124,6 +124,25 @@
 
         changeLogicalExpression(lineIndex, newValue) {
             model.lines[lineIndex].criteria = newValue;
+        }
+
+         moveSelection(deltaIndex) {
+            const l = this.model.lines.length;
+            this.model.selectedLineIndex += deltaIndex + l;
+            this.model.selectedLineIndex %= l;
+            this.updateView();
+        }
+
+         deleteLine() {
+            this.removeExistingLine();
+            this.updateView();
+        }
+
+         addLine() {
+            if (this.model.selectedLineIndex === this.model.lines.length - 1) return;
+            this.model.lines.splice(this.model.selectedLineIndex + 1, 0, { code: '', edit: true });
+            this.model.selectedLineIndex++;
+            this.updateView();
         }
     }
     customElements.define('code-editor', CodeEditor);
