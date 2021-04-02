@@ -76,7 +76,7 @@
             const preHtml = isInEditMode ? '' : `
                 <button 
                     class="command" 
-                    onclick="runCustomCommand('${customCommand.name}')"
+                    onclick="runCustomCommand('${customCommand.codeName}')"
                     >
                     ${customCommand.name}
                 </button>            
@@ -134,7 +134,7 @@
             customCommand.isInEditMode = isInEditMode;
             if (!isInEditMode) {
                 const editor = document.getElementsByTagName('code-editor')[0];
-                customCommand.code = editor.getFunctionCode();
+                customCommand.code = editor.getFunctionCode(true);
                 customCommand.codeName = editor.model.codeName;
                 customCommand.name = editor.model.name;
             }
@@ -162,6 +162,13 @@
             return str.split(' ').map(function (word, index) {
                 return index == 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
             }).join('');
+        }
+
+        function runCustomCommand(commandCodeName){
+            const command = globals.model.customCommands.find(c=>c.codeName==commandCodeName);
+            if(!command)return;
+            eval(command.code);
+            eval(commandCodeName+'()');
         }
     </script>
 </body>
