@@ -38,12 +38,14 @@
                 <input type="text" value="${this.model.name}" />
                 <pre>${this.model.lines.reduce(this.formatCodeLine.bind(this), startState).HTML}</pre>
                 <div>
-                    <button click="this.moveSelection(-1)">▲</button>
-                    <button click="this.moveSelection(1)">▼</button>
-                    ${this.model.selectedLineIndex == this.model.lines.length - 1 ? '' : '<button class="add" click="this.addLine()">↵</button>'}
-                    ${lineObj.edit ? '<button class="delete" click="this.deleteLine()">×</button>' : ''}
-                </div>
+                    <button class="lineCommand" click="this.moveSelection(-1)">▲</button>
+                    <button class="lineCommand" click="this.moveSelection(1)">▼</button>
+                    ${this.model.selectedLineIndex == this.model.lines.length - 1 ? '' : 
+                        '<button class="add lineCommand" click="this.addLine()">↵</button>'}
+                    ${lineObj.edit ? '<button class="delete lineCommand" click="this.deleteLine()">×</button>' : ''}
+                </div>                
                 ${this.createCommandsHtml()}
+                <br/>
                 `;
             this.addEventListeners();
             if (this.model.requestFocus) {
@@ -191,21 +193,20 @@
     function getStyle() {
         return `
             pre {
-                font-size: 3.5vmin;
-                width: 300px;
+                font-size: 2vmin;
             }
 
             select {
                 font-family: monospace;
-                font-size: 3.5vmin;
+                font-size: 2vmin;
                 background-color: rgb(247, 244, 213);
             }
 
-            button {
-                font-size: 3.5vmin;
-                line-height: 4.5vmin;
-                margin: 0.2vmin;
-                min-width: 6vmin;
+            button.lineCommand {
+                font-size: 2vmin;
+                line-height: 3vmin;
+                margin: 0.3vmin;
+                min-width: 3vmin;
             }
 
             .selected {
@@ -231,7 +232,7 @@
             }
 
             input {
-                font-size: 150%;
+                font-size: 2vmin;
             }
         `;
     }

@@ -13,7 +13,8 @@
         <div><canvas id="myCanvas"></canvas></div>
         <div id="panel"></div>
     </div>
-    <script src="labyrinth.js"></script>
+    <script src="js/labyrinth.js"></script>
+    <script src="js/codeEditor.js"></script>
     <script>
         localInit();
 
@@ -85,9 +86,7 @@
 
         function createCustomCommandHtml(customCommand, index) {
             const isInEditMode = globals.model.customCommands[index].isInEditMode;
-            const preHtml = isInEditMode ? `
-                <input id="commandName" type="text" value="${customCommand.name}" oninput="editCommandName(this, ${index})"/><br/>
-            `: `
+            const preHtml = isInEditMode ? '': `
                 <button 
                     class="command" 
                     onclick="runCustomCommand('${customCommand.name}')"
@@ -105,23 +104,27 @@
             return `
                 <div class="customCommand">
                     ${preHtml}                    
-                    <pre>${createJavaScriptFunction(customCommand)}</pre>
+                    ${createJavaScriptFunction(customCommand)}
                     ${postHtml}
                 </div>
                 `;
         }
 
         function createJavaScriptFunction(customCommand) {
+            if(customCommand.isInEditMode){
+                return '<code-editor></code-editor>';
+            }
+
             const buttonFunc = (labelTxt, onclick, index, defaultTxt) => customCommand.isInEditMode
                 ? `<button onclick="${onclick}Command(${index})">${labelTxt}</button>\n`
                 : defaultTxt || '';
 
-            return `function ${customCommand.codeName}() {\n`
+            return `<pre>function ${customCommand.codeName}() {\n`
                 + customCommand.commands.map(
                     (codeCommand,index) => `  ${buttonFunc('+', 'add', index)}  ${codeCommand.command}() ${buttonFunc('×', 'select', index, '\n')}`)
                     .join('')
                 + `  ${buttonFunc('+', 'add', customCommand.commands.length)}`
-                + '}\n';
+                + '}\n</pre>';
         }
 
         function createLastCodeHtml(command, returnValue) {
