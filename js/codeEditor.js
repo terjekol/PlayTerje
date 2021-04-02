@@ -2,12 +2,14 @@
     class CodeEditor extends HTMLElement {
         constructor() {
             super();
+            const name = this.getAttribute('name') || 'funksjon1';
+            const codeName = toCamelCase(name);
             this.model = {
-                name: '',
-                codeName: '',
+                name: name,
+                codeName: codeName,
                 selectedLineIndex: 1,
                 lines: [
-                    { code: 'function dummy() {' },
+                    { code: `function ${codeName}() {` },
                     { code: '', edit: true },
                     { code: '}' },
                 ],
@@ -136,7 +138,6 @@
         handleInputChange() {
             this.model.name = this.input.value;
             this.model.codeName = toCamelCase(this.input.value);
-            console.log(this.model.name, this.model.codeName, this.model);
             this.model.requestFocus = {
                 selectionStart: this.input.selectionStart,
                 selectionEnd: this.input.selectionEnd,

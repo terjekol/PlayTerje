@@ -22,11 +22,11 @@
             init(3);
             const model = globals.model;
             model.customCommands = [
-                {
-                    name: 'Snu venstre',
-                    codeName: 'snuVenstre',
-                    code: '',
-                },
+                // {
+                //     name: 'Snu venstre',
+                //     codeName: 'snuVenstre',
+                //     code: '',
+                // },
             ];
             updateView();
         }
@@ -58,7 +58,7 @@
                     ${model.customCommands.map(createCustomCommandHtml).join('')}
                     <div class="customCommand" style="align-self: stretch">
                         <div style="display: flex; align-items: center; height: 100%">
-                            <button class="nonCommand">+</button>
+                            <button onclick="addCustomCommand()" class="nonCommand">+</button>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
 
         function createJavaScriptFunction(customCommand) {
             if (customCommand.isInEditMode) {
-                return '<code-editor></code-editor>';
+                return `<code-editor name="${customCommand.name}"></code-editor>`;
             }
 
             const buttonFunc = (labelTxt, onclick, index, defaultTxt) => customCommand.isInEditMode
@@ -120,6 +120,15 @@
         }
 
         // controller
+        function addCustomCommand() {
+            globals.model.customCommands.push({
+                name: 'Min funksjon',
+                codeName: 'minFunksjon',
+                code: 'function minFunksjon() {\n\n}\n',
+            });
+            updateView();
+        }
+
         function editCustomCommand(index, isInEditMode) {
             const customCommand = globals.model.customCommands[index];
             customCommand.isInEditMode = isInEditMode;
