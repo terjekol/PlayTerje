@@ -135,6 +135,8 @@
             if (!isInEditMode) {
                 const editor = document.getElementsByTagName('code-editor')[0];
                 customCommand.code = editor.getFunctionCode();
+                customCommand.codeName = editor.model.codeName;
+                customCommand.name = editor.model.name;
             }
             updateView();
         }
