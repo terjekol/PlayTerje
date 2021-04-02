@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Labyrint</title>
-    <link rel="stylesheet" href="css/labyrint.css"/>
+    <link rel="stylesheet" href="css/labyrint.css" />
 </head>
 
 <body>
@@ -25,20 +25,7 @@
                 {
                     name: 'Snu venstre',
                     codeName: 'snuVenstre',
-                    commands: [
-                        {
-                            type: 'call',
-                            command: 'snuHøyre',
-                        },
-                        {
-                            type: 'call',
-                            command: 'snuHøyre',
-                        },
-                        {
-                            type: 'call',
-                            command: 'snuHøyre',
-                        },
-                    ],
+                    code: '',
                 },
             ];
             updateView();
@@ -86,7 +73,7 @@
 
         function createCustomCommandHtml(customCommand, index) {
             const isInEditMode = globals.model.customCommands[index].isInEditMode;
-            const preHtml = isInEditMode ? '': `
+            const preHtml = isInEditMode ? '' : `
                 <button 
                     class="command" 
                     onclick="runCustomCommand('${customCommand.name}')"
@@ -111,7 +98,7 @@
         }
 
         function createJavaScriptFunction(customCommand) {
-            if(customCommand.isInEditMode){
+            if (customCommand.isInEditMode) {
                 return '<code-editor></code-editor>';
             }
 
@@ -119,12 +106,7 @@
                 ? `<button onclick="${onclick}Command(${index})">${labelTxt}</button>\n`
                 : defaultTxt || '';
 
-            return `<pre>function ${customCommand.codeName}() {\n`
-                + customCommand.commands.map(
-                    (codeCommand,index) => `  ${buttonFunc('+', 'add', index)}  ${codeCommand.command}() ${buttonFunc('×', 'select', index, '\n')}`)
-                    .join('')
-                + `  ${buttonFunc('+', 'add', customCommand.commands.length)}`
-                + '}\n</pre>';
+            return `<pre>${customCommand.code}</pre>`;
         }
 
         function createLastCodeHtml(command, returnValue) {
@@ -139,7 +121,12 @@
 
         // controller
         function editCustomCommand(index, isInEditMode) {
-            globals.model.customCommands[index].isInEditMode = isInEditMode;
+            const customCommand = globals.model.customCommands[index];
+            customCommand.isInEditMode = isInEditMode;
+            if (!isInEditMode) {
+                const editor = document.getElementsByTagName('code-editor')[0];
+                customCommand.code = editor.getFunctionCode();
+            }
             updateView();
         }
 

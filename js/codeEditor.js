@@ -33,15 +33,14 @@
         updateView() {
             this.removeEventListeners();
             const lineObj = this.model.lines[this.model.selectedLineIndex];
-            const startState = { HTML: '', currentLevel: 0, };
             this.div.innerHTML = `
                 <input type="text" value="${this.model.name}" />
-                <pre>${this.model.lines.reduce(this.formatCodeLine.bind(this), startState).HTML}</pre>
+                <pre>${this.getFunctionCode()}</pre>
                 <div>
                     <button class="lineCommand" click="this.moveSelection(-1)">▲</button>
                     <button class="lineCommand" click="this.moveSelection(1)">▼</button>
-                    ${this.model.selectedLineIndex == this.model.lines.length - 1 ? '' : 
-                        '<button class="add lineCommand" click="this.addLine()">↵</button>'}
+                    ${this.model.selectedLineIndex == this.model.lines.length - 1 ? '' :
+                    '<button class="add lineCommand" click="this.addLine()">↵</button>'}
                     ${lineObj.edit ? '<button class="delete lineCommand" click="this.deleteLine()">×</button>' : ''}
                 </div>                
                 ${this.createCommandsHtml()}
@@ -53,6 +52,14 @@
                 this.input.setSelectionRange(this.model.requestFocus.selectionStart, this.model.requestFocus.selectionEnd);
                 this.model.requestFocus = null;
             }
+        }
+        getFunctionCode(hideSelection) {
+            const tmpSelection = this.model.selectedLineIndex;
+            if (hideSelection) this.model.selectedLineIndex = -1;
+            const startState = { HTML: '', currentLevel: 0 };
+            const html = this.model.lines.reduce(this.formatCodeLine.bind(this), startState).HTML;
+            if (hideSelection) this.model.selectedLineIndex = tmpSelection;
+            return html;
         }
         removeEventListeners() {
             for (let btn of this.buttons) {
@@ -127,7 +134,7 @@
             this.model.lines[this.model.selectedLineIndex].criteria = select.value;
         }
         handleInputChange() {
-            this.model.name = this.input.value;            
+            this.model.name = this.input.value;
             this.model.codeName = toCamelCase(this.input.value);
             console.log(this.model.name, this.model.codeName, this.model);
             this.model.requestFocus = {
