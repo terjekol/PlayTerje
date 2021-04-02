@@ -17,7 +17,9 @@
                     'false',
                     'true',
                     'gå()',
+                    '!gå()',
                     'erVedUtgang()',
+                    '!erVedUtgang()',
                 ],
             };
 
