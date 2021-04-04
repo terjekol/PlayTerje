@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <maze-canvas size="3"></maze-canvas>
+    <maze-commands></maze-commands>
     <!-- <code-editor></code-editor> -->
 
     <script src="js/codeEditor.js"></script>
     <script src="js/maze-canvas.js"></script>
+    <script src="js/maze-commands.js"></script>
     <script>
-        const maze = document.getElementsByTagName('maze-canvas')[0];
-
-        const gå = maze.gå.bind(maze);
-        const snuHøyre = maze.snuHøyre.bind(maze);
-        const erVedUtgang = maze.erVedUtgang.bind(maze);
+        const mazeCanvas = document.getElementsByTagName('maze-canvas')[0];
+        const mazeCommands = document.getElementsByTagName('maze-commands')[0];
+        const gå = mazeCanvas.gå.bind(mazeCanvas);
+        const snuHøyre = mazeCanvas.snuHøyre.bind(mazeCanvas);
+        const erVedUtgang = mazeCanvas.erVedUtgang.bind(mazeCanvas);
+        mazeCommands.onclick = code => eval(code);
     </script>
 </body>
+
 </html>

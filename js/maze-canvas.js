@@ -1,5 +1,5 @@
 (function () {
-    class Maze extends HTMLElement {
+    class MazeCanvas extends HTMLElement {
         constructor() {
             super();
             this.attachShadow({ mode: 'open' });
@@ -225,5 +225,5 @@
         return array;
     }
 
-    customElements.define('maze-canvas', Maze);
+    customElements.define('maze-canvas', MazeCanvas);
 })();
