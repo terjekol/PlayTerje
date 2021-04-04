@@ -6,7 +6,6 @@
             this.attachShadow({ mode: 'open' });
             this.onclick = null;
             this.shadowRoot.innerHTML = `
-                <h1>Innebygde kommandoer</h1>
                 <button id="btn1" class="command" click="gå()">Gå</button>
                 <button id="btn2" class="command" click="snuHøyre()">Snu høyre</button>
                 <button id="btn3" class="command" click="erVedUtgang()">Er ved utgang?</button>
