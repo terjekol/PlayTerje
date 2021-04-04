@@ -13,7 +13,11 @@
     <script src="js/codeEditor.js"></script>
     <script src="js/maze.js"></script>
     <script>
-        
+        const maze = document.getElementsByTagName('maze-canvas')[0];
+
+        const gå = maze.gå.bind(maze);
+        const snuHøyre = maze.snuHøyre.bind(maze);
+        const erVedUtgang = maze.erVedUtgang.bind(maze);
     </script>
 </body>
 </html>
