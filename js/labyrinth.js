@@ -42,7 +42,7 @@ function generateLabyrinth() {
 
     while (stack.length > 0) {
         let currentRoom = stack.pop();
-        let neighbourNotVisited = getNeighbourNotVisited(currentRoom, rooms);
+        let neighbourNotVisited = this.getNeighbourNotVisited(currentRoom, rooms);
         if (neighbourNotVisited === null) continue;
         stack.push(currentRoom);
         model.openWalls[neighbourNotVisited.direction + currentRoom] = true;
@@ -53,7 +53,7 @@ function generateLabyrinth() {
     }
 }
 
-function getNeighbourNotVisited(roomIndex, rooms) {
+getNeighbourNotVisited(roomIndex, rooms) {
     const model = globals.model;
     shuffle(model.directions);
     const rowIndex = Math.floor(roomIndex / model.labyrinthSize);

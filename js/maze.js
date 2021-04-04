@@ -9,7 +9,7 @@
             div.appendChild(this.canvas);
             this.ctx = this.canvas.getContext("2d");
             const model = this.model = {};
-            model.labyrinthSize = this.getAttribute('size');
+            model.labyrinthSize = parseInt(this.getAttribute('size'));
             model.cornerSize = 20;
             model.wallToCornerRatio = 4;
             model.directions = ['opp', 'ned', 'høyre', 'venstre'];
