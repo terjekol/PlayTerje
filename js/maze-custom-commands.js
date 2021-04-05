@@ -4,11 +4,6 @@
             super();
             this.model = {
                 customCommands: [
-                    {
-                        name: 'Snu venstre',
-                        codeName: 'snuVenstre',
-                        code: 'function snuVenstre() {\n\n}\n',
-                    },
                 ],
             };
             this.attachShadow({ mode: 'open' });
