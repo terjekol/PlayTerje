@@ -22,15 +22,6 @@
             this.updateView();
         }
 
-        connectedCallback() {
-            // this.btnGo = this.shadowRoot.getElementById('btn1');
-            // this.btnTurnRight = this.shadowRoot.getElementById('btn2');
-            // this.btnIsAtExit = this.shadowRoot.getElementById('btn3');
-            // this.btnGo.onclick = this.handleClick.bind(this);
-            // this.btnTurnRight.onclick = this.handleClick.bind(this);
-            // this.btnIsAtExit.onclick = this.handleClick.bind(this);
-        }
-
         updateView() {
             const model = this.model;
             this.div.innerHTML = `
@@ -71,12 +62,22 @@
             eval('this.' + code);
         }
 
+        runCustomCommand(name) {
+            if (!this.onclick) return;
+            const command = this.model.customCommands.find(cmd => cmd.codeName === name);
+            if (!command) return;
+            const allCustomCommands = this.model.customCommands.map(cmd => cmd.code).join('\n');
+            const returnValue = this.onclick(allCustomCommands + '\n' + command.codeName + '()');
+            this.model.lastCommand = { code: command.code, returnValue: quotify(returnValue) };
+            this.updateView();
+        }
+
         createCustomCommandHtml(customCommand, index) {
             const isInEditMode = this.model.customCommands[index].isInEditMode;
             const preHtml = isInEditMode ? '' : `
                 <button 
                     class="command" 
-                    onclick="runCustomCommand('${customCommand.codeName}')"
+                    click="runCustomCommand('${customCommand.codeName}')"
                     >
                     ${customCommand.name}
                 </button>            
@@ -99,8 +100,14 @@
 
         createJavaScriptFunction(customCommand) {
             return customCommand.isInEditMode
-                ? `<code-editor name="${customCommand.name}"></code-editor>`
+                ? `<code-editor name="${customCommand.name}" others="${this.getOtherCommands(customCommand)}"></code-editor>`
                 : `<pre>${customCommand.code}</pre>`;
+        }
+
+        getOtherCommands(command) {
+            return this.model.customCommands
+                .filter(cmd => cmd !== command)
+                .map(cmd => cmd.codeName + '()');
         }
 
         createLastCodeHtml(command, returnValue) {

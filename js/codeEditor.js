@@ -96,11 +96,15 @@
         createCommandsHtml() {
             const lineObj = this.model.lines[this.model.selectedLineIndex];
             if (!lineObj.edit) return '';
+            const others = this.getAttribute('others');
+            const commands = others === '' ? [] : this.getAttribute('others').split(',');
+            commands.push(...['gå()', 'snuHøyre()', 'erVedUtgang()']);
+
             return `
                 <div>
-                    <button class="code" click="this.changeLine(btn.innerHTML)">gå()</button>
-                    <button class="code" click="this.changeLine(btn.innerHTML)">snuHøyre()</button>
-                    <button class="code" click="this.changeLine(btn.innerHTML)">erVedUtgang()</button>
+                    ${commands.map(cmd => `
+                    <button class="code" click="this.changeLine(btn.innerHTML)">${cmd}</button>                
+                    `).join('')}
                     <button class="code italic" click="this.changeLine(btn.innerHTML)">if</button>
                     <button class="code italic" click="this.changeLine(btn.innerHTML)">while</button>
                 </div>
@@ -211,7 +215,7 @@
     function getStyle() {
         return `
             pre {
-                font-size: 2vmin;
+                font-size: 150%;
             }
 
             select {

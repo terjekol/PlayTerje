@@ -23,10 +23,12 @@
     <script>
         const mazeCanvas = document.getElementsByTagName('maze-canvas')[0];
         const mazeCommands = document.getElementsByTagName('maze-commands')[0];
+        const mazeCustomCommands = document.getElementsByTagName('maze-custom-commands')[0];
         const gå = mazeCanvas.gå.bind(mazeCanvas);
         const snuHøyre = mazeCanvas.snuHøyre.bind(mazeCanvas);
         const erVedUtgang = mazeCanvas.erVedUtgang.bind(mazeCanvas);
         mazeCommands.onclick = code => eval(code);
+        mazeCustomCommands.onclick = code => eval(code);
     </script>
 </body>
 
