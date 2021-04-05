@@ -132,8 +132,8 @@
         editCustomCommand(index, isInEditMode) {
             const customCommand = this.model.customCommands[index];
             customCommand.isInEditMode = isInEditMode;
+            const editor = this.div.getElementsByTagName('code-editor')[0];
             if (!isInEditMode) {
-                const editor = this.div.getElementsByTagName('code-editor')[0];
                 customCommand.code = editor.getFunctionCode(true);
                 customCommand.codeName = editor.model.codeName;
                 customCommand.name = editor.model.name;

@@ -65,6 +65,14 @@
             if (hideSelection) this.model.selectedLineIndex = tmpSelection;
             return html;
         }
+
+        setFunctionCode(code) {
+            this.model.selectedLineIndex = 1;
+            this.model.lines = code.split('\n').map(
+                function (line, index) { return { code: line, edit: index !== 0 && !line.includes('}') } }
+            );
+            this.updateView();
+        }
         removeEventListeners() {
             for (let btn of this.buttons) {
                 btn.onclick = null;
