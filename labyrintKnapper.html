@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #page {
+            display: flex;
+        }
+
+        button,
+        ol,
+        span {
+            font-size: 150%;
+        }
+
+        button.command {
+            background-color: green;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page">
+        <div>
+            <div>
+                <button class="command" onclick="gå()">Gå</button>
+                <button class="command" onclick="snuHøyre()">Snu høyre</button>
+                <button onclick="location.reload()">Start på nytt</button>
+            </div>
+            <div>
+                <maze-canvas size="3"></maze-canvas>
+            </div>
+        </div>
+        <div id="program">
+        </div>
+
+        <script src="js/maze-canvas.js"></script>
+        <script>
+            const commands = [];
+            const mazeCanvas = document.getElementsByTagName('maze-canvas')[0];
+
+            function gå() {
+                commands.push('Gå');
+                mazeCanvas.gå();
+                updateView();
+            }
+
+            function snuHøyre() {
+                commands.push('Snu høyre');
+                mazeCanvas.snuHøyre();
+                updateView();
+            }
+
+            function updateView() {
+                document.getElementById('program').innerHTML = commands.length == 0 ? '' : `
+                    <span>Program</span>
+                    <ol>${commands.map(cmd => `<li>${cmd}</li>`).join('')}</ol>
+                `;
+            }
+        </script>
+</body>
+
+</html>
