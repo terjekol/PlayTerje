@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <svg style="height: 100%" viewBox="0 0 100 100" id="mySvg">
+    </svg>
+    <script>
+        const model = {
+            commands: [
+                { command: 'M', x: 50, y: 5 },
+                { command: 'L', x: 95, y: 95 },
+                { command: 'L', x: 5, y: 95 },
+            ],
+        };
+
+        updateView();
+        function updateView(){
+            const path = model.commands.map(c=>c.command + c.x + ' ' + c.y).join('');
+            document.getElementById('mySvg').innerHTML = `
+                <path 
+                    d="${path}" 
+                    stroke="green"
+                    fill="none"
+                    />
+                `;
+        }
+
+        function addLine(x,y){
+            model.commands.push({ command: 'L', x, y });
+            updateView();
+        }
+    </script>
+</body>
+
+</html>
