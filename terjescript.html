@@ -13,17 +13,41 @@
     <svg style="height: 100%" viewBox="0 0 100 100" id="mySvg">
     </svg>
     <script>
+        const random16hex = () => (0x10000 | Math.random() * 0x10000).toString(16).substr(1);
+        const random128hex = (tmp) => tmp && tmp.length === 32 ? tmp : random128hex((tmp || '') + random16hex());
+        const appContext = {
+            path: '',
+        };
+        const commands = {
+            moveTo: {
+                nameTxt: 'Hopp til punktet',
+                nameJs: 'hoppTilPunkt',
+                params: ['x', 'y'],
+                impl: function (args) {
+                    model.commands.push({ command: 'L', x, y });
+                    updateView();
+                },
+            },
+            lineTo: {
+                nameTxt: 'Tegn linje til punktet',
+                nameJs: 'tegnLinjeTilPunkt',
+                params: ['x', 'y'],
+            },
+        };
         const model = {
             commands: [
-                { command: 'M', x: 50, y: 5 },
-                { command: 'L', x: 95, y: 95 },
-                { command: 'L', x: 5, y: 95 },
+                { command: commands.moveTo, args: { x: 50, y: 5 } },
+                { command: commands.lineTo, args: { x: 95, y: 95 } },
+                { command: commands.lineTo, args: { x: 5, y: 95 } },
+                // { command: 'M', x: 50, y: 5 },
+                // { command: 'L', x: 95, y: 95 },
+                // { command: 'L', x: 5, y: 95 },
             ],
         };
 
         updateView();
-        function updateView(){
-            const path = model.commands.map(c=>c.command + c.x + ' ' + c.y).join('');
+        function updateView() {
+            const path = model.commands.map(c => c.command + c.x + ' ' + c.y).join('');
             document.getElementById('mySvg').innerHTML = `
                 <path 
                     d="${path}" 
@@ -33,7 +57,7 @@
                 `;
         }
 
-        function addLine(x,y){
+        function addLine(x, y) {
             model.commands.push({ command: 'L', x, y });
             updateView();
         }
