@@ -6,36 +6,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
+    <style>
+        #mySvg {
+            background-color: lightgray;
+        }
+    </style>
 </head>
 
 <body>
     <svg style="height: 100%" viewBox="0 0 100 100" id="mySvg">
     </svg>
     <script>
-        const random16hex = () => (0x10000 | Math.random() * 0x10000).toString(16).substr(1);
-        const random128hex = (tmp) => tmp && tmp.length === 32 ? tmp : random128hex((tmp || '') + random16hex());
-        const appContext = {
+        const uniqueIdentifierPart = () => (0x10000 | Math.random() * 0x10000).toString(16).substr(1);
+        const uniqueIdentifier = (tmp) => tmp && tmp.length === 32 ? tmp : random128hex((tmp || '') + uniqueIdentifierPart());
+        const theAppContext = {
             path: '',
+            state: {
+                x: 0,
+                y: 0,
+            },
         };
         const commands = {
             moveTo: {
                 nameTxt: 'Hopp til punktet',
                 nameJs: 'hoppTilPunkt',
                 params: ['x', 'y'],
-                impl: function (args) {
-                    model.commands.push({ command: 'L', x, y });
-                    updateView();
+                impl: function (args, appContext) {
+                    appContext.path += `M ${args.x} ${args.y} `;
+                    appContext.state.x = args.x;
+                    appContext.state.y = args.y;
                 },
             },
             lineTo: {
                 nameTxt: 'Tegn linje til punktet',
                 nameJs: 'tegnLinjeTilPunkt',
                 params: ['x', 'y'],
-            },
+                impl: function (args, appContext) {
+                    appContext.path += `L ${args.x} ${args.y} `;
+                    appContext.state.x = args.x;
+                    appContext.state.y = args.y;
+                },            },
         };
         const model = {
-            commands: [
+            program: [
                 { command: commands.moveTo, args: { x: 50, y: 5 } },
                 { command: commands.lineTo, args: { x: 95, y: 95 } },
                 { command: commands.lineTo, args: { x: 5, y: 95 } },
@@ -57,10 +70,6 @@
                 `;
         }
 
-        function addLine(x, y) {
-            model.commands.push({ command: 'L', x, y });
-            updateView();
-        }
     </script>
 </body>
 
