@@ -77,5 +77,6 @@ class TerjeScript {
                 fill="none"
                 />
             `;
+        new Vivus(this.svgId);
     }
 }
