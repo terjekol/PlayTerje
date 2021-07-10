@@ -15,21 +15,22 @@
 </head>
 
 <body>
-    <svg style="height: 100%" viewBox="0 0 100 100" id="mySvg">
+    <button onclick="terjeScript.run()">Run</button>
+    <svg style="width: 50%" viewBox="0 0 100 100" id="TerjeScriptSvg">
     </svg>
     <script>
-
-        updateView();
-        function updateView() {
-            const path = model.commands.map(c => c.command + c.x + ' ' + c.y).join('');
-            document.getElementById('mySvg').innerHTML = `
-                <path 
-                    d="${path}" 
-                    stroke="green"
-                    fill="none"
-                    />
-                `;
-        }
+        const terjeScript = new TerjeScript('TerjeScriptSvg');
+        // updateView();
+        // function updateView() {
+        //     const path = model.commands.map(c => c.command + c.x + ' ' + c.y).join('');
+        //     document.getElementById('mySvg').innerHTML = `
+        //         <path 
+        //             d="${path}" 
+        //             stroke="green"
+        //             fill="none"
+        //             />
+        //         `;
+        // }
 
     </script>
 </body>

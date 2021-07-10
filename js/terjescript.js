@@ -1,5 +1,6 @@
 class TerjeScript {
-    constructor() {
+    constructor(svgId) {
+        this.svgId = svgId;
         this.appContext = {
             path: '',
             programCounterIndex: 0,
