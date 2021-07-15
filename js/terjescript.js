@@ -1,31 +1,36 @@
 class TerjeScript {
     constructor(svgId) {
         this.svgId = svgId;
-        const pathCommand = letter => function (args) {
+        this.pathCommand = letter => function (args) {
             this.appContext.path += `${letter} ${args.x} ${args.y} `;
             this.appContext.state.x = args.x;
             this.appContext.state.y = args.y;
         };
+        this.initCommands();
+        this.initProgram();
+        this.initElements();
+    }
+    initCommands() {
         this.commands = {
             hoppTil: {
                 name: 'Hopp til punktet',
                 params: ['x', 'y'],
-                impl: pathCommand('M').bind(this),
+                impl: this.pathCommand('M').bind(this),
             },
             hopp: {
                 name: 'Hopp',
                 params: ['x', 'y'],
-                impl: pathCommand('m').bind(this),
+                impl: this.pathCommand('m').bind(this),
             },
             tegnLinjeTil: {
                 name: 'Tegn linje til punktet',
                 params: ['x', 'y'],
-                impl: pathCommand('L').bind(this),
+                impl: this.pathCommand('L').bind(this),
             },
             tegnLinje: {
                 name: 'Tegn linje',
                 params: ['x', 'y'],
-                impl: pathCommand('l').bind(this),
+                impl: this.pathCommand('l').bind(this),
             },
             goto: {
                 nameTxt: 'Gå til ',
@@ -37,6 +42,8 @@ class TerjeScript {
                 }
             }
         };
+    }
+    initProgram() {
         this.program = {
             main: [
                 { id: 'bbb', command: this.commands.tegnLinje, args: { x: 10, y: 0 } },
@@ -47,6 +54,10 @@ class TerjeScript {
 
             }
         }
+    }
+    initElements(){
+        this.canvas = document.getElementsByTagName('terjescript-canvas')[0];
+        this.editor = document.getElementsByTagName('terjescript-editor')[0];
     }
     initAppContext() {
         this.appContext = {
@@ -70,13 +81,6 @@ class TerjeScript {
         for (let step of this.program.main) {
             step.command.impl(step.args);
         }
-        document.getElementById(this.svgId).innerHTML = `
-            <path 
-                d="${this.appContext.path}" 
-                stroke="green"
-                fill="none"
-                />
-            `;
-        new Vivus(this.svgId);
+        this.canvas.updateView(this.appContext.path);
     }
 }

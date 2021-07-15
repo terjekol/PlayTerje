@@ -7,32 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="js/terjescript.js"></script>
+    <script src="js/terjescript-canvas.js"></script>
+    <script src="js/terjescript-editor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vivus@latest/dist/vivus.min.js"></script>
-    <style>
-        #mySvg {
-            background-color: lightgray;
-        }
-    </style>
 </head>
 
 <body>
     <button onclick="terjeScript.run()">Run</button>
-    <svg style="width: 50%" viewBox="0 0 100 100" id="TerjeScriptSvg">
-    </svg>
+    <terjescript-canvas></terjescript-canvas>
+    <terjescript-editor></terjescript-editor>
     <script>
-        const terjeScript = new TerjeScript('TerjeScriptSvg');
-        // updateView();
-        // function updateView() {
-        //     const path = model.commands.map(c => c.command + c.x + ' ' + c.y).join('');
-        //     document.getElementById('mySvg').innerHTML = `
-        //         <path 
-        //             d="${path}" 
-        //             stroke="green"
-        //             fill="none"
-        //             />
-        //         `;
-        // }
-
+        const terjeScript = new TerjeScript();
     </script>
 </body>
 
