@@ -1,29 +1,28 @@
 (function () {
+    function createStepHtml(step) {
+        const name = step.command.name;
+        return name + '()';
+    }
+
     class TerjeScriptEditor extends HTMLElement {
         constructor() {
             super();
             this.attachShadow({ mode: 'open' });
-            this.shadowRoot.innerHTML = `
-                <svg viewBox="0 0 100 100">
-                </svg>
-                <style>
-                    svg {
-                        background-color: lightgray;
-                        width: 50%;
-                    }
-                </style>
-                `;
         }
-
-        connectedCallback() {
-            this.svg = this.shadowRoot.children[0];
-            this.path = this.getAttribute('path');
-            this.updateView();
-        }
-
         updateView() {
-            this.svg.innerHTML = /*html*/`
+            this.shadowRoot.innerHTML = /*html*/`
+                <ol>
+                    ${this.core.program.main.map(step=>`
+                    <li>
+                        ${step.command.name}
+                    </li>
+                    `).join('')}
+                </ol>
             `;
+        }
+        registerCore(core) {
+            this.core = core;
+            this.updateView();
         }
     }
 

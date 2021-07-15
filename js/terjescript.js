@@ -58,6 +58,8 @@ class TerjeScript {
     initElements(){
         this.canvas = document.getElementsByTagName('terjescript-canvas')[0];
         this.editor = document.getElementsByTagName('terjescript-editor')[0];
+        //this.canvas.registerCore(this);
+        this.editor.registerCore(this);
     }
     initAppContext() {
         this.appContext = {
