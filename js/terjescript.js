@@ -18,7 +18,7 @@ class TerjeScript {
                 impl: this.pathCommand('M').bind(this),
             },
             hopp: {
-                name: 'Hopp',
+                name: 'Hopp i retning',
                 params: ['x', 'y'],
                 impl: this.pathCommand('m').bind(this),
             },
@@ -28,7 +28,7 @@ class TerjeScript {
                 impl: this.pathCommand('L').bind(this),
             },
             tegnLinje: {
-                name: 'Tegn linje',
+                name: 'Tegn linje i retning',
                 params: ['x', 'y'],
                 impl: this.pathCommand('l').bind(this),
             },

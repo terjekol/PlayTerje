@@ -1,9 +1,4 @@
 (function () {
-    function createStepHtml(step) {
-        const name = step.command.name;
-        return name + '()';
-    }
-
     class TerjeScriptEditor extends HTMLElement {
         constructor() {
             super();
@@ -12,9 +7,10 @@
         updateView() {
             this.shadowRoot.innerHTML = /*html*/`
                 <ol>
-                    ${this.core.program.main.map(step=>`
+                    ${this.core.program.main.map(step => `
                     <li>
                         ${step.command.name}
+                        ${Object.keys(step.args).map(key=>`${key}: ${step.args[key]}`).join(', ')}
                     </li>
                     `).join('')}
                 </ol>
