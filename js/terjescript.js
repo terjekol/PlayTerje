@@ -55,6 +55,10 @@ class TerjeScript {
             }
         }
     }
+    moveCommandInProgram(index, delta, program){
+        const element = this.program.main.splice(index, 1)[0];
+        this.program.main.splice(index + delta, 0, element);
+    }
     initElements(){
         this.canvas = document.getElementsByTagName('terjescript-canvas')[0];
         this.editor = document.getElementsByTagName('terjescript-editor')[0];
