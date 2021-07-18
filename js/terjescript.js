@@ -45,6 +45,7 @@ class TerjeScript {
     }
     initProgram() {
         this.program = {
+            selectedIndex: 0,
             main: [
                 { id: 'bbb', command: this.commands.tegnLinje, args: { x: 10, y: 0 } },
                 { id: 'ccc', command: this.commands.tegnLinje, args: { x: 0, y: 10 } },
@@ -55,11 +56,14 @@ class TerjeScript {
             }
         }
     }
-    moveCommandInProgram(index, delta, program){
+    moveCommandInProgram(index, delta, program) {
         const element = this.program.main.splice(index, 1)[0];
         this.program.main.splice(index + delta, 0, element);
     }
-    initElements(){
+    selectCommandInProgram(index) {
+        this.program.selectedIndex = index;
+    }
+    initElements() {
         this.canvas = document.getElementsByTagName('terjescript-canvas')[0];
         this.editor = document.getElementsByTagName('terjescript-editor')[0];
         //this.canvas.registerCore(this);

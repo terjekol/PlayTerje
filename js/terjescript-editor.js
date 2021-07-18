@@ -3,11 +3,17 @@
         constructor() {
             super();
             this.attachShadow({ mode: 'open' });
-            this.shadowRoot.innerHTML = `
+            this.shadowRoot.innerHTML = /*html*/`
                 <div></div>
                 <style>
                     button {
                         font-size: 75%;
+                    }
+                    li{
+                        padding: 1vmin;
+                    }
+                    li.selected {
+                        background-color: goldenrod;
                     }
                 </style>
                 `;
@@ -15,14 +21,19 @@
         }
         updateView() {
             this.removeEventListeners();
+            const selectedIndex = this.core.program.selectedIndex;
             this.root.innerHTML = /*html*/`
                 <ol>
                     ${this.core.program.main.map((step, index) => /*html*/`
-                    <li>
+                    <li class="${selectedIndex===index?'selected':''}">
                         ${step.command.name}
                         ${Object.keys(step.args).map(key => `${key}: ${step.args[key]}`).join(', ')}
+                        ${selectedIndex===index?/*html*/`
                         <button data-onclick="this.core.moveCommandInProgram(${index},-1)">▲</button>
                         <button data-onclick="this.core.moveCommandInProgram(${index},1)">▼</button>
+                        `:/*html*/`
+                        <button data-onclick="this.core.selectCommandInProgram(${index})">velg</button>
+                        `}
                     </li>
                     `).join('')}
                 </ol>
