@@ -44,28 +44,42 @@ class TerjeScript {
         };
     }
     initProgram() {
-        this.program = {
-            selectedIndex: 0,
-            main: [
-                { id: 'bbb', command: this.commands.tegnLinje, args: { x: 10, y: 0 } },
-                { id: 'ccc', command: this.commands.tegnLinje, args: { x: 0, y: 10 } },
-                //{ id: 'ddd', command: this.commands.goto, args: { instructionId: 'bbb' } },
-            ],
-            custom: {
-
+        this.programs = [
+            {
+                selectedIndex: 0,
+                steps: [
+                    { id: 'bbb', command: this.commands.tegnLinje, args: { x: 10, y: 0 } },
+                    { id: 'ccc', command: this.commands.tegnLinje, args: { x: 0, y: 10 } },
+                    //{ id: 'ddd', command: this.commands.goto, args: { instructionId: 'bbb' } },
+                ],
             }
-        }
+        ];
     }
-    moveCommandInProgram(delta, programName) {
-        const program = !programName ? this.program.main : this.program.custom[programName];
-        const index = this.program.selectedIndex;
+    getSteps(programIndex){
+        const program = this.programs[programIndex];
+        return program.steps;
+    }
+    moveCommandInProgram(delta, programIndex) {
+        const program = this.programs[programIndex || 0];
+        const index = program.selectedIndex;
         const newIndex = index + delta;
-        const element = program.splice(index, 1)[0];
-        program.splice(newIndex, 0, element);
-        this.program.selectedIndex = Math.min(Math.max(newIndex, 0), program.length - 1);
+        const element = program.steps.splice(index, 1)[0];
+        program.steps.splice(newIndex, 0, element);
+        this.setSelectedIndex(newIndex, programIndex);
     }
-    selectCommandInProgram(index) {
-        this.program.selectedIndex = index;
+    deleteCommandInProgram(programIndex) {
+        const program = this.programs[programIndex || 0];
+        const index = program.selectedIndex;
+        program.steps.splice(index, 1);
+        this.setSelectedIndex(index, programIndex);
+    }
+    setSelectedIndex(index, programIndex) {
+        const program = this.programs[programIndex || 0];
+        program.selectedIndex = Math.min(Math.max(index, 0), program.steps.length - 1);
+    }
+    getSelectedIndex(programIndex){
+        const program = this.programs[programIndex];
+        return program.selectedIndex;
     }
     initElements() {
         this.canvas = document.getElementsByTagName('terjescript-canvas')[0];
