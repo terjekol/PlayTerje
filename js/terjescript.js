@@ -56,9 +56,13 @@ class TerjeScript {
             }
         }
     }
-    moveCommandInProgram(index, delta, program) {
-        const element = this.program.main.splice(index, 1)[0];
-        this.program.main.splice(index + delta, 0, element);
+    moveCommandInProgram(delta, programName) {
+        const program = !programName ? this.program.main : this.program.custom[programName];
+        const index = this.program.selectedIndex;
+        const newIndex = index + delta;
+        const element = program.splice(index, 1)[0];
+        program.splice(newIndex, 0, element);
+        this.program.selectedIndex = Math.min(Math.max(newIndex, 0), program.length - 1);
     }
     selectCommandInProgram(index) {
         this.program.selectedIndex = index;

@@ -29,8 +29,8 @@
                         ${step.command.name}
                         ${Object.keys(step.args).map(key => `${key}: ${step.args[key]}`).join(', ')}
                         ${selectedIndex===index?/*html*/`
-                        <button data-onclick="this.core.moveCommandInProgram(${index},-1)">▲</button>
-                        <button data-onclick="this.core.moveCommandInProgram(${index},1)">▼</button>
+                        <button data-onclick="this.core.moveCommandInProgram(-1)">▲</button>
+                        <button data-onclick="this.core.moveCommandInProgram(1)">▼</button>
                         `:/*html*/`
                         <button data-onclick="this.core.selectCommandInProgram(${index})">velg</button>
                         `}

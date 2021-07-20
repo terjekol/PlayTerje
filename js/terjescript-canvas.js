@@ -4,7 +4,7 @@
             super();
             this.attachShadow({ mode: 'open' });
             this.shadowRoot.innerHTML = `
-                <svg viewBox="0 -0.5 100 100.5">
+                <svg viewBox="-0.5 -0.5 100.5 100.5">
                 </svg>
                 <style>
                     svg {
