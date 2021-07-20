@@ -11,28 +11,33 @@ class TerjeScript {
         this.initElements();
     }
     initCommands() {
-        this.commands = {
-            hoppTil: {
+        this.commands = [
+            {
+                id: 'hoppTil',
                 name: 'Hopp til punktet',
                 params: ['x', 'y'],
                 impl: this.pathCommand('M').bind(this),
             },
-            hopp: {
+            {
+                id: 'hopp',
                 name: 'Hopp i retning',
                 params: ['x', 'y'],
                 impl: this.pathCommand('m').bind(this),
             },
-            tegnLinjeTil: {
+            {
+                id: 'tegnLinjeTil',
                 name: 'Tegn linje til punktet',
                 params: ['x', 'y'],
                 impl: this.pathCommand('L').bind(this),
             },
-            tegnLinje: {
+            {
+                id: 'tegnLinje',
                 name: 'Tegn linje i retning',
                 params: ['x', 'y'],
                 impl: this.pathCommand('l').bind(this),
             },
-            goto: {
+            {
+                id: 'goTo',
                 nameTxt: 'Gå til ',
                 nameJs: 'tegnLinjeTilPunkt',
                 params: ['instructionId'],
@@ -41,23 +46,29 @@ class TerjeScript {
                     this.appContext.programCounterIndex = this.program.main.findIndex(instruction => instruction.id === id);
                 }
             }
-        };
+        ];
     }
     initProgram() {
         this.programs = [
             {
                 selectedIndex: 0,
                 steps: [
-                    { id: 'bbb', command: this.commands.tegnLinje, args: { x: 10, y: 0 } },
-                    { id: 'ccc', command: this.commands.tegnLinje, args: { x: 0, y: 10 } },
+                    { id: 'bbb', command: 'tegnLinje', args: { x: 10, y: 0 } },
+                    { id: 'ccc', command: 'tegnLinje', args: { x: 0, y: 10 } },
                     //{ id: 'ddd', command: this.commands.goto, args: { instructionId: 'bbb' } },
                 ],
             }
         ];
     }
-    getSteps(programIndex){
+    getCommand(id) {
+        return this.commands.find(cmd => cmd.id === id);
+    }
+    getSteps(programIndex) {
         const program = this.programs[programIndex];
         return program.steps;
+    }
+    getCommands() {
+        return this.commands;
     }
     moveCommandInProgram(delta, programIndex) {
         const program = this.programs[programIndex || 0];
@@ -77,7 +88,7 @@ class TerjeScript {
         const program = this.programs[programIndex || 0];
         program.selectedIndex = Math.min(Math.max(index, 0), program.steps.length - 1);
     }
-    getSelectedIndex(programIndex){
+    getSelectedIndex(programIndex) {
         const program = this.programs[programIndex];
         return program.selectedIndex;
     }
@@ -106,8 +117,9 @@ class TerjeScript {
     }
     run() {
         this.initAppContext();
-        for (let step of this.program.main) {
-            step.command.impl(step.args);
+        for (let step of this.programs[0].steps) {
+            const command = this.getCommand(step.command);
+            command.impl(step.args);
         }
         this.canvas.updateView(this.appContext.path);
     }

@@ -19,7 +19,7 @@
                 `;
             this.root = this.shadowRoot.children[0];
         }
-        connectedCallback(){
+        connectedCallback() {
             this.programIndex = parseInt(this.getAttribute('data-program-index'));
         }
         updateView() {
@@ -28,21 +28,33 @@
             this.root.innerHTML = /*html*/`
                 <ol>
                     ${this.core.getSteps(this.programIndex).map((step, index) => /*html*/`
-                    <li class="${selectedIndex===index?'selected':''}">
-                        ${step.command.name}
-                        ${Object.keys(step.args).map(key => `${key}: ${step.args[key]}`).join(', ')}
-                        ${selectedIndex===index?/*html*/`
-                        <button data-onclick="this.core.moveCommandInProgram(-1)">▲</button>
-                        <button data-onclick="this.core.moveCommandInProgram(1)">▼</button>
-                        <button data-onclick="this.core.deleteCommandInProgram()">×</button>
-                        `:/*html*/`
-                        <button data-onclick="this.core.setSelectedIndex(${index}, ${this.programIndex})">velg</button>
-                        `}
+                    <li class="${selectedIndex === index ? 'selected' : ''}">
+                        ${selectedIndex === index
+                            ? this.createSelectedStepHtml(step, index)
+                            : this.createStepHtml(step, index)}
                     </li>
                     `).join('')}
                 </ol>
             `;
             this.addEventListeners();
+        }
+        createSelectedStepHtml(step, index) {
+            const command = this.core.getCommand(step.command);
+            return /*html*/`
+                ${command.name}
+                ${Object.keys(step.args).map(key => `${key}: ${step.args[key]}`).join(', ')}
+                <button data-onclick="this.core.moveCommandInProgram(-1)">▲</button>
+                <button data-onclick="this.core.moveCommandInProgram(1)">▼</button>
+                <button data-onclick="this.core.deleteCommandInProgram()">×</button>
+            `;
+        }
+        createStepHtml(step, index) {
+            const command = this.core.getCommand(step.command);
+            return /*html*/`
+                ${command.name}
+                ${Object.keys(step.args).map(key => `${key}: ${step.args[key]}`).join(', ')}
+                <button data-onclick="this.core.setSelectedIndex(${index}, ${this.programIndex})">velg</button>
+            `;
         }
         removeEventListeners() {
             for (let btn of this.shadowRoot.querySelectorAll('button')) {
@@ -54,7 +66,7 @@
                 btn.addEventListener('click', this.btnClick.bind(this));
             }
         }
-        btnClick(clickEvent){
+        btnClick(clickEvent) {
             const btn = clickEvent.srcElement;
             const onclick = btn.getAttribute('data-onclick');
             eval(onclick);
