@@ -30,8 +30,8 @@
                     ${this.core.getSteps(this.programIndex).map((step, index) => /*html*/`
                     <li class="${selectedIndex === index ? 'selected' : ''}">
                         ${selectedIndex === index
-                            ? this.createSelectedStepHtml(step, index)
-                            : this.createStepHtml(step, index)}
+                    ? this.createSelectedStepHtml(step, index)
+                    : this.createStepHtml(step, index)}
                     </li>
                     `).join('')}
                 </ol>
@@ -39,14 +39,22 @@
             this.addEventListeners();
         }
         createSelectedStepHtml(step, index) {
-            const command = this.core.getCommand(step.command);
             return /*html*/`
-                ${command.name}
-                ${Object.keys(step.args).map(key => `${key}: ${step.args[key]}`).join(', ')}
-                <button data-onclick="this.core.moveCommandInProgram(-1)">▲</button>
-                <button data-onclick="this.core.moveCommandInProgram(1)">▼</button>
-                <button data-onclick="this.core.deleteCommandInProgram()">×</button>
+            <select>
+                ${this.createOptionsHtml(step, index)}
+            </select>
+            ${Object.keys(step.args).map(key => `${key}: ${step.args[key]}`).join(', ')}
+            <button data-onclick="this.core.moveCommandInProgram(-1)">▲</button>
+            <button data-onclick="this.core.moveCommandInProgram(1)">▼</button>
+            <button data-onclick="this.core.deleteCommandInProgram()">×</button>
             `;
+        }
+        createOptionsHtml(step, index) {
+            const allCommands = this.core.getCommands();
+            return allCommands.map(cmd =>/*html*/`
+                <option ${step.command === cmd.id ? 'selected' : ''}>${cmd.name}</option>
+            `).join('');
+
         }
         createStepHtml(step, index) {
             const command = this.core.getCommand(step.command);

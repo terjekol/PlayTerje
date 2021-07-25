@@ -14,13 +14,13 @@ class TerjeScript {
         this.commands = [
             {
                 id: 'hoppTil',
-                name: 'Hopp til punktet',
+                name: 'Flytt til punktet',
                 params: ['x', 'y'],
                 impl: this.pathCommand('M').bind(this),
             },
             {
                 id: 'hopp',
-                name: 'Hopp i retning',
+                name: 'Flytt i retning',
                 params: ['x', 'y'],
                 impl: this.pathCommand('m').bind(this),
             },
@@ -38,8 +38,7 @@ class TerjeScript {
             },
             {
                 id: 'goTo',
-                nameTxt: 'Gå til ',
-                nameJs: 'tegnLinjeTilPunkt',
+                name: 'Gå til et annet punkt i programmet',
                 params: ['instructionId'],
                 programCounter(args) {
                     const id = args.instructionId;
