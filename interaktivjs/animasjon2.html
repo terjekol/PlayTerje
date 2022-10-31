@@ -29,27 +29,26 @@
         const figurBredde = 30;
         const figurHøyde = 30;
 
-x = 10;
-y = 50;
-retningX = 2;
-retningY = -3;
-ctx.fillStyle = 'green';
+        let x = 10;
+        let y = 50;
+        let fartX = 2;
+        let fartY = -3;
+        ctx.fillStyle = 'green';
 
-
-animer();
-function animer() {
-    ctx.clearRect(0, 0, canvasBredde, canvasHøyde)
-    x = x + retningX
-    y = y + retningY
-    if (x > canvasBredde - figurBredde || x < 0) {
-        retningX = -retningX;
-    }
-    if (y > canvasHøyde - figurHøyde || y < 0) {
-        retningY = -retningY;
-    }
-    ctx.fillRect(x, y, figurBredde, figurHøyde)
-    requestAnimationFrame(animer)
-}    
+        animer();
+        function animer() {
+            ctx.clearRect(0, 0, canvasBredde, canvasHøyde)
+            x = x + fartX
+            y = y + fartY
+            if (x > canvasBredde - figurBredde || x < 0) {
+                fartX = -fartX;
+            }
+            if (y > canvasHøyde - figurHøyde || y < 0) {
+                fartY = -fartY;
+            }
+            ctx.fillRect(x, y, figurBredde, figurHøyde)
+            requestAnimationFrame(animer)
+        }    
     </script>
 </body>
 
