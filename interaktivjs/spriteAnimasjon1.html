@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Animasjon med JavaScript</title>
+    <style>
+        body {
+            background: black;
+        }
+
+        #animCanvas {
+            background: #2c2c81;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 5px solid white;
+        }
+
+        img {
+            display: none;
+        }
+    </style>
+</head>
+
+<body onload="animer()">
+    <canvas id="animCanvas"></canvas>
+    <img id="figur" src="../img/enemy.png" />
+    <script>
+        const canvas = document.getElementById('animCanvas');
+        const ctx = canvas.getContext('2d');
+        const canvasBredde = canvas.width = 600;
+        const canvasHøyde = canvas.height = 540;
+        const figurBredde = 80;
+        const figurHøyde = 60;
+        const spriteSheetBilde = document.getElementById('figur');
+        const spriteAntall = 6;
+        const spriteVenteRunder = 3;
+
+        let spriteIndex = 0;
+        let venteRunderIgjen = 0;
+        let x = 10;
+        ctx.fillStyle = 'green';
+        function animer() {
+            ctx.clearRect(0, 0, canvasBredde, canvasHøyde);
+            drawSprite(spriteIndex);
+            x++;
+            if (venteRunderIgjen == 0) {
+                spriteIndex = (spriteIndex + 1) % spriteAntall;
+                venteRunderIgjen = spriteVenteRunder;
+            } else {
+                venteRunderIgjen--;
+            }
+            requestAnimationFrame(animer);
+        }
+
+        function drawSprite(spriteIndex) {
+            const spriteSheetX = spriteIndex * figurBredde;
+            const spriteSheetY = 0;
+            const utklippBredde = figurBredde;
+            const utklippHøyde = figurHøyde;
+            const canvasX = x;
+            const canvasY = 240;
+
+            ctx.drawImage(spriteSheetBilde,
+                spriteSheetX, spriteSheetY,
+                utklippBredde, utklippHøyde,
+                canvasX, canvasY,
+                utklippBredde, utklippHøyde);
+        }
+    </script>
+</body>
+
+</html>
