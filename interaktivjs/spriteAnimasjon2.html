@@ -35,14 +35,21 @@
         const figurHøyde = 60;
         const spriteSheetBilde = document.getElementById('figur');
         const spriteAntall = 6;
+        const spriteVenteRunder = 3;
 
         let spriteIndex = 0;
+        let venteRunderIgjen = 0;
         let x = 10;
         ctx.fillStyle = 'green';
         function animer() {
             ctx.clearRect(0, 0, canvasBredde, canvasHøyde);
             drawSprite(spriteIndex);
-            spriteIndex = (spriteIndex + 1) % spriteAntall;
+            if (venteRunderIgjen == 0) {
+                spriteIndex = (spriteIndex + 1) % spriteAntall;
+                venteRunderIgjen = spriteVenteRunder;
+            } else {
+                venteRunderIgjen--;
+            }
             requestAnimationFrame(animer);
         }
 
