@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Animasjon med JavaScript</title>
+    <style>
+        body {
+            background: black;
+        }
+
+        #animCanvas {
+            background: #2c2c81;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 5px solid white;
+        }
+
+        img {
+            display: none;
+        }
+    </style>
+</head>
+
+<body onload="animer()">
+    <canvas id="animCanvas"></canvas>
+    <img id="bakgrunn" src="../img/background.png" />
+    <script>
+        const canvas = document.getElementById('animCanvas');
+        const ctx = canvas.getContext('2d');
+        const canvasBredde = canvas.width = 800;
+        const canvasHøyde = canvas.height = 720;
+        const bakgrunnBredde = 2400;
+        const bakgrunnHøyde = 720;
+        const bakgrunn = document.getElementById('bakgrunn');
+
+        let bakgrunnX = 0;
+        let bakgrunnFart = -2;
+
+        function animer() {
+            ctx.clearRect(0, 0, canvasBredde, canvasHøyde);
+            const restartBakgrunn = bakgrunnX < -bakgrunnBredde;
+            bakgrunnX = restartBakgrunn ? 0 : bakgrunnX + bakgrunnFart;
+            ctx.drawImage(bakgrunn, bakgrunnX, 0);
+            const bakgrunnHøyreX = bakgrunnX + bakgrunnBredde;
+            if (bakgrunnHøyreX < canvasBredde) {
+                const x = bakgrunnX + bakgrunnBredde - 1;
+                ctx.drawImage(bakgrunn, x, 0);
+            }
+            requestAnimationFrame(animer);
+        }
+    </script>
+</body>
+
+</html>
+
