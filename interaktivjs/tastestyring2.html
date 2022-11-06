@@ -19,7 +19,7 @@
     </style>
 </head>
 
-<body onkeydown="handleKey(event)">
+<body onkeydown="handleKey(event)" onkeyup="handleKey(event)">
     <canvas id="animCanvas"></canvas>
     <script>
         const canvas = document.getElementById('animCanvas');
@@ -35,6 +35,8 @@
         let fartY = 0;
         ctx.fillStyle = 'green';
 
+        const keys = new Set();
+
         animer();
         function animer() {
             ctx.clearRect(0, 0, canvasBredde, canvasHøyde)
@@ -44,11 +46,18 @@
             requestAnimationFrame(animer)
         }
 
-        function handleKey(e) {        
-            if(e.key === 'ArrowUp') fartY -= 1;
-            else if(e.key === 'ArrowDown') fartY += 1;
-            else if(e.key === 'ArrowRight') fartX += 1;
-            else if(e.key === 'ArrowLeft') fartX -= 1;
+        function handleKey(e) {
+            if (!e.key.startsWith('Arrow')) return;
+            const direction = e.key.substr(5);
+            if (e.type === 'keydown') keys.add(direction);
+            else keys.delete(direction);
+
+            const up = keys.has('Up') ? -3 : 0;
+            const down = keys.has('Down') ? 3 : 0;
+            const left = keys.has('Left') ? -3 : 0;
+            const right = keys.has('Right') ? 3 : 0;
+            fartX = left + right;
+            fartY = up + down;
         }
     </script>
 </body>
