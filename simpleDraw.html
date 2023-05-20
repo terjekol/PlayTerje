@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript platform game</title>
+    <style>
+        #gameCanvas {
+            background: darkgray;
+        }
+
+        /* .page {
+            display: flex;
+        }
+
+        .col {
+            width: calc(50% - 2em);
+            margin: 1em;
+        } */
+    </style>
+</head>
+
+<body>
+    <h1>Eksempel nivå 1</h1>
+
+    <!-- <div class="page">
+        <div class="col" style="min-width: 400px;">
+            <h2>Tegneområde</h2>
+            <canvas id="gameCanvas"></canvas>
+        </div>
+        <div class="col">
+            <h2>Instruksjon</h2>
+            <p>
+                Det grå området rett under dette avsnittet er et tegneområde som du skal tegne på ved å kjøre og lage
+                JavaScript-kommandoer fra det såkalte konsollet. Dette er beskrevet videre under tegneområdet.
+            </p>
+        </div>
+    </div> -->
+    <script>
+        const gameCanvas = document.getElementById('gameCanvas');
+        const canvas = gameCanvas.getContext('2d');
+        const size = gameCanvas.width = gameCanvas.height = 400;
+
+        const numberOfBlocksInEachDirection = 12;
+        const width = height = 50;
+        let index = 0;
+
+        function draw(color) {
+            const col = index % numberOfBlocksInEachDirection;
+            const row = Math.floor(index / numberOfBlocksInEachDirection);
+            const x = col * width;
+            const y = row * height;
+            canvas.fillStyle = color;
+            canvas.fillRect(x, y, width, height);
+            index++;
+        }
+    </script>
+</body>
+
+</html>
