@@ -43,6 +43,9 @@
             eller <tt>light</tt> først, som for eksempel <tt>darkblue</tt> og <tt>lightblue</tt>.
         </li>
         <li>
+            Test ut denne koden: <tt>draw('blue', 3)</tt>
+        </li>
+        <li>
             Test ut å lage dine egne delprogram. Begynn med å teste ut delprogrammet under:
             <pre>function regnbue() {
     draw('red')
@@ -53,86 +56,52 @@
     draw('indigo')
     draw('violet')
 }</pre>
-    Du kan kopiere all koden over inn i konsollet og så trykke <b>enter</b>. For å kjøre delprogrammet skriver du <tt>regnbue()</tt>.
+            Du kan kopiere all koden over inn i konsollet og så trykke <b>enter</b>. For å kjøre delprogrammet skriver
+            du <tt>regnbue()</tt>.
         </li>
         <li>
-            I programmering handler mye om å uttrykke det vi ønsker enklest mulig. (Vi kaller dette DRY-prinsippet = Don't Repeat Yourself.) 
-            Nå skal vi se på to forskjellige måter å tegne et forenklet 4x4 sjakkbrett på. Test ut koden under - den bruker ikke delprogram:
+            I programmering handler mye om å uttrykke det vi ønsker enklest mulig. (Vi kaller dette DRY-prinsippet =
+            Don't Repeat Yourself.)
+            Nå skal vi se på to forskjellige måter å tegne et forenklet 4x4 sjakkbrett på. Test ut koden under - den
+            bruker ikke delprogram:
             <pre>draw('white')
 draw('black')
 draw('white')
 draw('black')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
+draw('gray', 8)
 draw('black')
 draw('white')
 draw('black')
 draw('white')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
+draw('gray', 8)
 draw('white')
 draw('black')
 draw('white')
 draw('black')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
+draw('gray', 8)
 draw('black')
 draw('white')
 draw('black')
 draw('white')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')
-draw('gray')</pre>
-    Sammenlign så det med koden under som tegner hele sjakkbrettet - og også sentrerer det vertikalt: 
-    <pre>function sjakkbrett() {
+draw('gray', 8)</pre>
+            Sammenlign så det med koden under som tegner hele sjakkbrettet - og også sentrerer det vertikalt:
+            <pre>function sjakkbrett() {
     radHvitFørst()
     radSvartFørst()
     radHvitFørst()
     radSvartFørst()
-}
-
-function fireGrå() {
-    draw('gray')
-    draw('gray')
-    draw('gray')
-    draw('gray')
 }
 
 function radHvitFørst() {
     hvitSvartHvit()
     draw('black')
-    fireGrå()
-    fireGrå()
+    draw('gray', 8)
 }
 
 function radSvartFørst() {
     draw('black')
     hvitSvartHvit()
-    fireGrå()
-    fireGrå()
+    draw('gray', 8)
 }
 
 function hvitSvartHvit() {
@@ -141,8 +110,8 @@ function hvitSvartHvit() {
     draw('white')
 }</pre>
         </li>
-        <li>Lek videre med egne delprogram. Du kan for eksempel prøve å tegne det norske flagget, en mursteinsmur eller noe annet du finner på. Prøv først å 
-            få det til uten delprogram - og prøv deretter å fjerne gjentakelser ved hjelp av delprogram. 
+        <li>Lek videre med egne delprogram. Du kan for eksempel prøve å tegne det norske flagget, en mursteinsmur, et fullt sjakkbrett sentrert vertikalt og horisontalt eller
+            noe annet du finner på. Prøv først å             få det til uten delprogram - og prøv deretter å fjerne gjentakelser ved hjelp av delprogram.
         </li>
     </ol>
 
@@ -155,7 +124,7 @@ function hvitSvartHvit() {
         const width = height = 35;
         let index = 0;
 
-        function draw(color) {
+        function draw(color, count) {
             const col = index % numberOfBlocksInEachDirection;
             const row = Math.floor(index / numberOfBlocksInEachDirection);
             const x = col * width;
@@ -163,6 +132,9 @@ function hvitSvartHvit() {
             canvas.fillStyle = color;
             canvas.fillRect(x, y, width, height);
             index++;
+            if (typeof (count) === 'number' && count > 1) {
+                draw(color, count - 1);
+            }
         }
 
         function clear() {
