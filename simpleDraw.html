@@ -21,8 +21,8 @@
     </p>
     <h2>Slik kjører du JavaScript-kommandoer fra konsollet</h2>
     <ol>
-        <li>Dette fungerer på tilsvarende måte i alle nettlesere, men denne oppskriften forutsetter at du bruker
-            nettleseren Google Chrome. Trykk <b>F12</b>
+        <li>Dette fungerer omtrent likt i alle nettlesere, men denne oppskriften er basert
+            på at du bruker nettleseren Google Chrome. Trykk <b>F12</b>
             for å åpne utviklerverktøy og velg så fanen <b>Console</b>.
         </li>
         <li>I konsollet skriver du kommandoen <tt>draw('red')</tt> og trykker <b>enter</b>.
@@ -30,7 +30,11 @@
                 hvordan det skal se ut (og igjen for å skjule)</a>. <br />
             <img id="console" src="img/console.png" style="width: 50%; display: none;" />
         </li>
-        <li>Eksperimenter videre ved å kalle denne kommandoen flere ganger, men bytt ut <tt>red</tt> med en annen farge.
+        <li>Eksperimenter videre ved å kalle denne kommandoen flere ganger. Du kan trykke på piltast opp for å hente
+            frem din forrige kommando, så slipper du å skriver
+            den inn igjen og igjen. Hva skjer for hver gang? Hva skjer gangen etter at du har tegnet hele bredden på
+            første rad?</li>
+        <li>Eksperimente med andre farger. Bytt ut <tt>red</tt> med en annen farge.
             Noen andre gyldige fargenavn er:
             <tt>white</tt>, <tt>silver</tt>, <tt>gray</tt>, <tt>black</tt>, <tt>maroon</tt>, <tt>yellow</tt>,
             <tt>olive</tt>, <tt>lime</tt>, <tt>green</tt>,
@@ -38,15 +42,117 @@
             fleste farger kan du også legge til enten <tt>dark</tt>
             eller <tt>light</tt> først, som for eksempel <tt>darkblue</tt> og <tt>lightblue</tt>.
         </li>
+        <li>
+            Test ut å lage dine egne delprogram. Begynn med å teste ut delprogrammet under:
+            <pre>function regnbue() {
+    draw('red')
+    draw('orange')
+    draw('yellow')
+    draw('green')
+    draw('blue')
+    draw('indigo')
+    draw('violet')
+}</pre>
+    Du kan kopiere all koden over inn i konsollet og så trykke <b>enter</b>. For å kjøre delprogrammet skriver du <tt>regnbue()</tt>.
+        </li>
+        <li>
+            I programmering handler mye om å uttrykke det vi ønsker enklest mulig. (Vi kaller dette DRY-prinsippet = Don't Repeat Yourself.) 
+            Nå skal vi se på to forskjellige måter å tegne et forenklet 4x4 sjakkbrett på. Test ut koden under - den bruker ikke delprogram:
+            <pre>draw('white')
+draw('black')
+draw('white')
+draw('black')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('black')
+draw('white')
+draw('black')
+draw('white')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('white')
+draw('black')
+draw('white')
+draw('black')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('black')
+draw('white')
+draw('black')
+draw('white')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')
+draw('gray')</pre>
+    Sammenlign så det med koden under som tegner hele sjakkbrettet - og også sentrerer det vertikalt: 
+    <pre>function sjakkbrett() {
+    radHvitFørst()
+    radSvartFørst()
+    radHvitFørst()
+    radSvartFørst()
+}
+
+function fireGrå() {
+    draw('gray')
+    draw('gray')
+    draw('gray')
+    draw('gray')
+}
+
+function radHvitFørst() {
+    hvitSvartHvit()
+    draw('black')
+    fireGrå()
+    fireGrå()
+}
+
+function radSvartFørst() {
+    draw('black')
+    hvitSvartHvit()
+    fireGrå()
+    fireGrå()
+}
+
+function hvitSvartHvit() {
+    draw('white')
+    draw('black')
+    draw('white')
+}</pre>
+        </li>
+        <li>Lek videre med egne delprogram. Du kan for eksempel prøve å tegne det norske flagget, en mursteinsmur eller noe annet du finner på. Prøv først å 
+            få det til uten delprogram - og prøv deretter å fjerne gjentakelser ved hjelp av delprogram. 
+        </li>
     </ol>
 
     <script>
         const gameCanvas = document.getElementById('gameCanvas');
         const canvas = gameCanvas.getContext('2d');
-        const size = gameCanvas.width = gameCanvas.height = 400;
+        const size = gameCanvas.width = gameCanvas.height = 420;
 
         const numberOfBlocksInEachDirection = 12;
-        const width = height = 50;
+        const width = height = 35;
         let index = 0;
 
         function draw(color) {
@@ -57,6 +163,11 @@
             canvas.fillStyle = color;
             canvas.fillRect(x, y, width, height);
             index++;
+        }
+
+        function clear() {
+            index = 0;
+            canvas.clearRect(0, 0, width, height);
         }
 
         function toggle(id) {
